@@ -15,7 +15,7 @@ app.use(express.json()); // Parse JSON bodies
 
 
 // Connect to MongoDB
-const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/credoraDB';
+const mongoURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/credoraDB';
 mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
