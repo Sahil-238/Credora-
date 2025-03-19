@@ -1,0 +1,10 @@
+{
+    "certificates": [
+      {
+        "id": 1,
+        "studentName": "John Doe",
+        "internshipTitle": "Frontend Development Internship"
+      }
+    ]
+  }
+  
