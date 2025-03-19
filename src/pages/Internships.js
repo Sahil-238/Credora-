@@ -52,7 +52,7 @@ const Internships = () => {
   const [applicationResponse, setApplicationResponse] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/internships')
+    axios.get(`${process.env.REACT_APP_API_URL}/api/internships`)
     .then(response => {
         setInternships(response.data);
         setLoading(false);
@@ -67,7 +67,7 @@ const Internships = () => {
   const handleApplicationSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/internships/apply', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/internships/apply`, {
         name: appName,
         email: appEmail,
         domain: appDomain,

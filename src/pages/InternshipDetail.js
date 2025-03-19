@@ -10,7 +10,7 @@ const InternshipDetail = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/internships/${id}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/api/internships/${id}`)
       .then(response => {
         setInternship(response.data);
         setLoading(false);

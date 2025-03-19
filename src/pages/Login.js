@@ -15,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', { email, password });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`, { email, password });
       localStorage.setItem('token', response.data.token);
       setMessage('Login successful! Redirecting...');
       setTimeout(() => navigate('/'), 1500);
