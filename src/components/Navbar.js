@@ -4,12 +4,27 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
+  }, [location]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
   }, [location]);
 
   const handleLogout = () => {
@@ -24,31 +39,50 @@ const Navbar = () => {
         <div style={logoStyle}>
           <Link to="/" style={logoLinkStyle}>Credora</Link>
         </div>
-        <ul style={ulStyle}>
+        
+        {isMobile && (
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            style={hamburgerButtonStyle}
+          >
+            ☰
+          </button>
+        )}
+
+        <ul style={{
+          ...ulStyle,
+          ...(isMobile && mobileMenuStyle),
+          display: isMobile ? (isMenuOpen ? 'flex' : 'none') : 'flex'
+        }}>
           <li style={liStyle}>
-            <Link style={linkStyle} to="/">Home</Link>
+            <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/">Home</Link>
           </li>
           <li style={liStyle}>
-            <Link style={linkStyle} to="/about">About</Link>
+            <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/about">About</Link>
           </li>
           <li style={liStyle}>
-            <Link style={linkStyle} to="/internships">Internships</Link>
-        </li>
+            <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/internships">Internships</Link>
+          </li>
           <li style={liStyle}>
-            <Link style={linkStyle} to="/verify-certificate">Verify</Link>
+            <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/verify-certificate">Verify</Link>
           </li>
           {!isAuthenticated ? (
             <>
               <li style={liStyle}>
-                <Link style={linkStyle} to="/login">Login</Link>
+                <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/login">Login</Link>
               </li>
               <li style={liStyle}>
-                <Link style={signupButtonStyle} to="/signup">Sign Up</Link>
+                <Link style={{ ...signupButtonStyle, ...(isMobile && mobileLinkStyle) }} to="/signup">Sign Up</Link>
               </li>
             </>
           ) : (
             <li style={liStyle}>
-              <button onClick={handleLogout} style={logoutButtonStyle}>Logout</button>
+              <button 
+                onClick={handleLogout} 
+                style={{ ...logoutButtonStyle, ...(isMobile && mobileLinkStyle) }}
+              >
+                Logout
+              </button>
             </li>
           )}
         </ul>
@@ -96,7 +130,8 @@ const navContainer = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: `0 ${spacing.medium}`
+  padding: `0 ${spacing.medium}`,
+  position: 'relative'
 };
 
 const logoStyle = {
@@ -123,6 +158,18 @@ const ulStyle = {
   padding: 0
 };
 
+const mobileMenuStyle = {
+  position: 'absolute',
+  top: '100%',
+  left: 0,
+  right: 0,
+  backgroundColor: colors.background,
+  flexDirection: 'column',
+  gap: spacing.small,
+  padding: spacing.medium,
+  boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+};
+
 const liStyle = {
   display: 'flex',
   alignItems: 'center'
@@ -142,6 +189,11 @@ const linkStyle = {
   }
 };
 
+const mobileLinkStyle = {
+  width: '100%',
+  padding: spacing.small,
+};
+
 const signupButtonStyle = {
   ...linkStyle,
   backgroundColor: colors.secondary,
@@ -156,7 +208,7 @@ const signupButtonStyle = {
 
 const logoutButtonStyle = {
   ...signupButtonStyle,
-  backgroundColor: colors.error || '#dc2626',
+  backgroundColor: '#dc2626',
   border: 'none',
   cursor: 'pointer',
   fontFamily: fonts.primary,
@@ -165,6 +217,15 @@ const logoutButtonStyle = {
     backgroundColor: '#b91c1c',
     transform: 'translateY(-2px)'
   }
+};
+
+const hamburgerButtonStyle = {
+  backgroundColor: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: '1.5rem',
+  color: colors.text,
+  padding: spacing.small,
 };
 
 export default Navbar;
