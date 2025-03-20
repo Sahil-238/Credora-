@@ -118,11 +118,18 @@ const fonts = {
   heading: "'Poppins', sans-serif"
 };
 const logoImageStyle = {
-  maxHeight: '100%', // Will respect the 80px container height
+  height: '80px',
   width: 'auto',
   objectFit: 'contain',
-  transform: 'scale(0.4)', // Increase visual size without changing container height
-  transformOrigin: 'left center',
+  transform: 'scale(1.2)',
+  transformOrigin: 'center center',
+  transition: 'transform 0.3s ease',
+  '@media (max-width: 768px)': {
+    transform: 'scale(1.1)',
+  },
+  '@media (max-width: 480px)': {
+    transform: 'scale(1.0)',
+  },
 };
 
 // Navbar Styles
@@ -146,16 +153,22 @@ const navContainer = {
   alignItems: 'center',
   padding: `0 ${spacing.medium}`,
   position: 'relative',
-  height: '100%'
+  height: '100%',
+  '@media (max-width: 768px)': {
+    padding: `0 ${spacing.small}`
+  }
 };
 
 const logoStyle = {
   display: 'flex',
   alignItems: 'center',
   height: '100%',
-  overflow: 'visible' // Allow the scaled logo to overflow if needed
+  overflow: 'visible',
+  '@media (max-width: 768px)': {
+    flex: 1,
+    justifyContent: 'flex-start'
+  }
 };
-
 
 const logoLinkStyle = {
   color: colors.primary,
@@ -176,17 +189,17 @@ const ulStyle = {
 };
 
 const mobileMenuStyle = {
-  position: 'absolute',
-  top: '100%',
+  position: 'fixed',
+  top: '80px',
   left: 0,
   right: 0,
   backgroundColor: colors.background,
   flexDirection: 'column',
   gap: spacing.small,
   padding: spacing.medium,
-  boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+  zIndex: 999
 };
-
 const liStyle = {
   display: 'flex',
   alignItems: 'center'
@@ -240,9 +253,11 @@ const hamburgerButtonStyle = {
   backgroundColor: 'transparent',
   border: 'none',
   cursor: 'pointer',
-  fontSize: '1.5rem',
+  fontSize: '1.8rem',
   color: colors.text,
   padding: spacing.small,
+  marginLeft: 'auto',
+  zIndex: 1001
 };
 
 export default Navbar;
