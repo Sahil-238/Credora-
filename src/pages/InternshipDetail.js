@@ -27,9 +27,9 @@ const InternshipDetail = () => {
   // Determine the Google Form URL based on internship category
   let googleFormUrl = "https://forms.gle/oQbxp8PJ1caBqth97";
   if (internship.category === 'python') {
-    googleFormUrl = "https://forms.gle/NK9u73sRHVVCGm8q7";
+    googleFormUrl = "https://forms.gle/oQbxp8PJ1caBqth97";
   } else if (internship.category === 'java') {
-    googleFormUrl = "https://forms.gle/ujCcERYwuyPU1d4E9";
+    googleFormUrl = "https://forms.gle/oQbxp8PJ1caBqth97";
   }
 
   return (

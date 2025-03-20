@@ -36,9 +36,15 @@ const Navbar = () => {
   return (
     <nav style={navStyle}>
       <div style={navContainer}>
-        <div style={logoStyle}>
-          <Link to="/" style={logoLinkStyle}>Credora</Link>
-        </div>
+      <div style={logoStyle}>
+  <Link to="/" style={logoLinkStyle}>
+    <img 
+      src="/images/logo.png" 
+      alt="Credora Logo" 
+      style={logoImageStyle}
+    />
+  </Link>
+</div>  
         
         {isMobile && (
           <button 
@@ -66,7 +72,7 @@ const Navbar = () => {
           <li style={liStyle}>
             <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/verify-certificate">Verify</Link>
           </li>
-          {!isAuthenticated ? (
+          {/* {!isAuthenticated ? (
             <>
               <li style={liStyle}>
                 <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/login">Login</Link>
@@ -74,8 +80,8 @@ const Navbar = () => {
               <li style={liStyle}>
                 <Link style={{ ...signupButtonStyle, ...(isMobile && mobileLinkStyle) }} to="/signup">Sign Up</Link>
               </li>
-            </>
-          ) : (
+            </> */}
+          {/* ) : (
             <li style={liStyle}>
               <button 
                 onClick={handleLogout} 
@@ -84,7 +90,7 @@ const Navbar = () => {
                 Logout
               </button>
             </li>
-          )}
+          )} */}
         </ul>
       </div>
     </nav>
@@ -101,17 +107,22 @@ const colors = {
   lightText: '#64748b',
   lightBackground: '#e2e8f0'
 };
-
 const spacing = {
   small: '8px',
   medium: '16px',
   large: '24px',
   xlarge: '48px'
 };
-
 const fonts = {
   primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   heading: "'Poppins', sans-serif"
+};
+const logoImageStyle = {
+  maxHeight: '100%', // Will respect the 80px container height
+  width: 'auto',
+  objectFit: 'contain',
+  transform: 'scale(0.4)', // Increase visual size without changing container height
+  transformOrigin: 'left center',
 };
 
 // Navbar Styles
@@ -121,24 +132,30 @@ const navStyle = {
   boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
   position: 'sticky',
   top: 0,
-  zIndex: 1000
+  zIndex: 1000,
+  height: '80px', // Fixed navbar height
+  display: 'flex',
+  alignItems: 'center'
 };
-
 const navContainer = {
   maxWidth: '1200px',
+  width: '100%',
   margin: '0 auto',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: `0 ${spacing.medium}`,
-  position: 'relative'
+  position: 'relative',
+  height: '100%'
 };
 
 const logoStyle = {
-  fontSize: '1.5rem',
-  fontWeight: '700',
-  fontFamily: fonts.heading
+  display: 'flex',
+  alignItems: 'center',
+  height: '100%',
+  overflow: 'visible' // Allow the scaled logo to overflow if needed
 };
+
 
 const logoLinkStyle = {
   color: colors.primary,

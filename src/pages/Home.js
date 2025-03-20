@@ -52,7 +52,7 @@ const pageStyle = {
 
 const heroSection = {
   position: 'relative',
-  minHeight: '600px',
+  minHeight: '400px',
   borderRadius: '0 0 30px 30px',
   overflow: 'hidden',
   boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
@@ -480,6 +480,35 @@ const secondaryButton = {
   border: `2px solid ${colors.primary}`,
   color: colors.primary
 };
+
+// Add to style definitions
+const faqGrid = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+  gap: spacing.medium,
+  maxWidth: '1000px',
+  margin: '0 auto'
+};
+
+const faqItemStyle = {
+  padding: spacing.large,
+  backgroundColor: 'white',
+  borderRadius: '12px',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+  textAlign: 'left'
+};
+
+const questionStyle = {
+  color: colors.primary,
+  fontFamily: fonts.heading,
+  marginBottom: spacing.small,
+  fontSize: '1.1rem'
+};
+
+const answerStyle = {
+  color: colors.lightText,
+  lineHeight: 1.6
+};
 // Test
 // Data Arrays
 const domains = [
@@ -534,7 +563,33 @@ const partners = [
   { name: 'Microsoft', logo: '/logos/microsoft.png' },
   { name: 'Amazon', logo: '/logos/amazon.png' }
 ];
-
+// Add to data arrays
+const faqs = [
+  {
+    question: "What's the typical internship duration?",
+    answer: "We offer flexible durations from 1-6 months to fit academic schedules"
+  },
+  {
+    question: "Are the certificates recognized?",
+    answer: "All certificates are industry-verified and include verifiable digital credentials"
+  },
+  {
+    question: "Can I work on real projects?",
+    answer: "Yes! All internships involve hands-on projects with actual company datasets"
+  },
+  {
+    question: "Is there mentorship support?",
+    answer: "Dedicated mentors provide weekly guidance and career advice"
+  },
+  {
+    question: "Who's eligible to apply?",
+    answer: "Open to all undergraduate students regardless of year of study"
+  },
+  {
+    question: "How will my performance be evaluated?",
+    answer: "Your performance is assessed based on task completion, skill development, and feedback from mentors."
+  }
+];
 
 // Apply responsive styles
 Object.assign(heroSection, responsiveStyles.heroSection);
@@ -682,7 +737,17 @@ const Home = () => {
     ))}
   </div>
 </section> */}
-
+<section style={sectionStyle}>
+  <h2 style={sectionTitle}>Frequently Asked Questions</h2>
+  <div style={faqGrid}>
+    {faqs.map((faq, index) => (
+      <div key={index} style={faqItemStyle}>
+        <h3 style={questionStyle}>{faq.question}</h3>
+        <p style={answerStyle}>{faq.answer}</p>
+      </div>
+    ))}
+  </div>
+</section>
 {/* CTA Section */}
 <section style={{...sectionStyle, textAlign: 'center'}}>
   <h2 style={sectionTitle}>Ready to Launch Your Career?</h2>
