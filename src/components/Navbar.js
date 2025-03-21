@@ -121,7 +121,7 @@ const logoImageStyle = {
   height: '80px',
   width: 'auto',
   objectFit: 'contain',
-  transform: 'scale(1.2)',
+  transform: 'scale(2.0)',
   transformOrigin: 'center center',
   transition: 'transform 0.3s ease',
   '@media (max-width: 768px)': {
@@ -130,6 +130,8 @@ const logoImageStyle = {
   '@media (max-width: 480px)': {
     transform: 'scale(1.0)',
   },
+  paddingTop :'6px',
+  
 };
 
 // Navbar Styles
@@ -140,7 +142,7 @@ const navStyle = {
   position: 'sticky',
   top: 0,
   zIndex: 1000,
-  height: '80px', // Fixed navbar height
+  height: '50px', // Fixed navbar height
   display: 'flex',
   alignItems: 'center'
 };
@@ -164,6 +166,7 @@ const logoStyle = {
   alignItems: 'center',
   height: '100%',
   overflow: 'visible',
+  // padding:'5px',
   '@media (max-width: 768px)': {
     flex: 1,
     justifyContent: 'flex-start'
@@ -176,7 +179,8 @@ const logoLinkStyle = {
   transition: 'opacity 0.2s',
   ':hover': {
     opacity: 0.8
-  }
+  },
+  paddingLeft: '50px',
 };
 
 const ulStyle = { 

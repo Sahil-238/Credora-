@@ -129,9 +129,13 @@ const primaryButton = {
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'center', // centers content inside the button
   gap: spacing.small,
-  transition: 'transform 0.2s'
+  transition: 'transform 0.2s',
+  margin: '0 auto', // centers the button itself in a block-level container
+  textDecoration: 'none'
 };
+
 
 const buttonIcon = {
   fontSize: '1.2rem'
@@ -476,10 +480,12 @@ const ctaButtonGroup = {
 
 const secondaryButton = {
   ...primaryButton,
-  backgroundColor: 'transparent',
-  border: `2px solid ${colors.primary}`,
-  color: colors.primary
+  width: 'auto', // Prevent full-width
+  backgroundColor: colors.secondary,
+  border: `2px solid `,
+  color: 'white'
 };
+
 
 // Add to style definitions
 const faqGrid = {
@@ -717,7 +723,21 @@ const Home = () => {
         </div>
         <p style={cardText}>{opp.description}</p>
         {/* <button style={secondaryButton}>Apply Now</button> */}
-        <Link to="/internships" style={secondaryButton}>Apply Now</Link>
+        <button 
+          style={secondaryButton} 
+          onClick={() => navigate('/internships')}
+          >
+            Apply Now
+          </button>
+        {/* <Link to="/internships" style={secondaryButton}>Apply Now</Link> */}
+        {/* <a 
+                // href={internship.googleFormUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={secondaryButton}
+              >
+                Apply Now
+              </a> */}
       </div>
     ))}
   </div>
@@ -755,7 +775,7 @@ const Home = () => {
   <br />
   <div style={ctaButtonGroup}>
     <Link to="/internships" style={primaryButton}>Browse Internships</Link>
-    <Link to="/signup" style={secondaryButton}>Create Account</Link>
+    {/* <Link to="/signup" style={secondaryButton}>Create Account</Link> */}
   </div>
 </section>
     {/* Test */}
