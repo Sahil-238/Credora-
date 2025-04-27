@@ -1,3 +1,4 @@
+
 // // src/pages/Internships.js
 // import React, { useEffect, useState } from 'react';
 // import { Link } from 'react-router-dom';
@@ -483,6 +484,7 @@ import { Link } from 'react-router-dom';
 import { FaLaptopCode, FaPython, FaJava, FaCertificate, FaUsers, FaProjectDiagram } from 'react-icons/fa';
 import Footer from '../components/Footer';
 
+
 // Hardcoded internships data with Google Form URLs
 const internships = [
   {
@@ -645,7 +647,8 @@ const Internships = () => {
             <h4 style={benefitTitle}>Certification</h4>
             <p style={benefitText}>Receive completion certificates</p>
           </div>
-          
+
+
           <div style={benefitCard}>
             <FaUsers style={benefitIcon} />
             <h4 style={benefitTitle}>Expert Mentors</h4>
@@ -668,7 +671,8 @@ const Internships = () => {
             <h4 style={faqQuestion}>Program Duration?</h4>
             <p style={faqAnswer}>Flexible 1, 2, or 3 month options</p>
           </div>
-          
+
+
           <div style={faqItem}>
             <h4 style={faqQuestion}>Certification?</h4>
             <p style={faqAnswer}>Yes, upon successful completion</p>
@@ -681,7 +685,9 @@ const Internships = () => {
         </div>
       </section>
 
+
       <Footer />
+
     </div>
   );
 };

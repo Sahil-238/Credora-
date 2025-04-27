@@ -13,7 +13,6 @@ const VerifyCertificate = () => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/certificates/${certificateId}`);
       setCertificateData(response.data);

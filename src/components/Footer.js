@@ -225,7 +225,7 @@ const Footer = () => {
           <ul style={linkList}>
             <li><a href="/about" style={footerLink}>About Us</a></li>
             <li><a href="/internships" style={footerLink}>Internships</a></li>
-            <li><a href="/verify" style={footerLink}>Verify Certificate</a></li>
+            <li><a href="/verify-certificate" style={footerLink}>Verify Certificate</a></li>
             <li><a href="/contact" style={footerLink}>Contact</a></li>
           </ul>
         </div>
