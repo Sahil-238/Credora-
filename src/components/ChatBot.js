@@ -134,7 +134,7 @@ const ChatBot = () => {
     }
 
     try {
-      const systemPrompt = `You are Credora Assist, a professional and helpful AI assistant for Credora. Here's updated information about Credora:
+      const systemPrompt = `You are Credora Assist, a professional and helpful AI assistant for Credora. Here's updated information about Credora also display the link of WhatsApp and LinkedIn whenever needed:
 
 - Credora is a dynamic and fast-growing internship platform dedicated to empowering students and early-career professionals.
 - Located in Wardha, Maharashtra.
@@ -202,7 +202,7 @@ const ChatBot = () => {
 - Contact and Support:
 - Official Email: hr@credora.space / aniket@credora.space
 - LinkedIn: https://www.linkedin.com/company/credora-space
-- WhatsApp: Invitation links are sent along with offer letters. Join early to stay informed!
+- WhatsApp: https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb Invitation links are sent along with offer letters. Join early to stay informed!
 - Thank You for Choosing Credora!
 - We are excited to have you onboard. Get ready to explore, learn, innovate, and grow. Your career journey starts here, and we're honored to be part of it. Let's create success together—one project, one skill, one achievement at a time!
 - Welcome to the Credora Family!
