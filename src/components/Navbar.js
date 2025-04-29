@@ -9,6 +9,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Check admin login flag
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+  // Hide upload button on login page
+  const isLoginPage = location.pathname === '/login';
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
@@ -29,8 +35,39 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('isAdmin');
     setIsAuthenticated(false);
     navigate('/');
+  };
+
+  const handleUploadClick = () => {
+    document.getElementById('uploadInputNavbar').click();
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('certificateFile', file);
+    // For demonstration, using hardcoded studentName and internshipTitle
+    formData.append('studentName', 'Demo Student');
+    formData.append('internshipTitle', 'Demo Internship');
+
+    try {
+      const response = await fetch('/api/certificates', {
+        method: 'POST',
+        body: formData,
+      });
+      if (response.ok) {
+        alert('Certificate uploaded successfully!');
+      } else {
+        alert('Failed to upload certificate.');
+      }
+    } catch (error) {
+      console.error('Error uploading certificate:', error);
+      alert('Failed to upload certificate.');
+    }
   };
 
   return (
@@ -72,7 +109,14 @@ const Navbar = () => {
           <li style={liStyle}>
             <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/verify-certificate">Verify</Link>
           </li>
-          {/* {!isAuthenticated ? (
+          {isAdmin && !isLoginPage && (
+            <li style={liStyle}>
+              <Link to="/upload-certificate" style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }}>
+                Upload Certificate
+              </Link>
+            </li>
+          )}
+          {!isAuthenticated ? (
             <>
               <li style={liStyle}>
                 <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/login">Login</Link>
@@ -80,22 +124,37 @@ const Navbar = () => {
               <li style={liStyle}>
                 <Link style={{ ...signupButtonStyle, ...(isMobile && mobileLinkStyle) }} to="/signup">Sign Up</Link>
               </li>
-            </> */}
-          {/* ) : (
-            <li style={liStyle}>
-              <button 
-                onClick={handleLogout} 
-                style={{ ...logoutButtonStyle, ...(isMobile && mobileLinkStyle) }}
-              >
-                Logout
-              </button>
-            </li>
-          )} */}
+            </>
+          ) : (
+            <>
+              <li style={liStyle}>
+                <button 
+                  onClick={handleLogout} 
+                  style={{ ...logoutButtonStyle, ...(isMobile && mobileLinkStyle) }}
+                >
+                  Logout
+                </button>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>
   );
 };
+
+const buttonStyle = {
+  padding: '8px 16px',
+  fontSize: '14px',
+  cursor: 'pointer',
+  borderRadius: '6px',
+  border: 'none',
+  backgroundColor: '#2563eb',
+  color: 'white',
+  fontWeight: '600',
+  transition: 'background-color 0.3s ease',
+};
+
 
 // Design System Constants
 const colors = {
@@ -262,6 +321,18 @@ const hamburgerButtonStyle = {
   padding: spacing.small,
   marginLeft: 'auto',
   zIndex: 1001
+};
+
+const profileStyle = {
+  color: '#2563eb',
+  fontWeight: '600',
+  fontSize: '14px',
+  padding: '8px 16px',
+  borderRadius: '6px',
+  border: '1px solid #2563eb',
+  cursor: 'default',
+  userSelect: 'none',
+  marginRight: '10px',
 };
 
 export default Navbar;

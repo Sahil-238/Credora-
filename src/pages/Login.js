@@ -14,6 +14,21 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    // Hardcoded admin credentials
+    const adminEmail = 'admin@example.com';
+    const adminPassword = 'admin123';
+
+    if (email === adminEmail && password === adminPassword) {
+      localStorage.setItem('isAdmin', 'true');
+      setMessage('Admin login successful! Redirecting...');
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate('/');
+      }, 1500);
+      return;
+    }
+
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`, { email, password });
       localStorage.setItem('token', response.data.token);
