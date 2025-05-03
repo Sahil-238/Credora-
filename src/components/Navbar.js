@@ -72,6 +72,9 @@ const Navbar = () => {
           <li style={liStyle}>
             <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/verify-certificate">Verify</Link>
           </li>
+          <li style={liStyle}>
+            <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/hackathon">Credathon</Link>
+          </li>
           {/* {!isAuthenticated ? (
             <>
               <li style={liStyle}>
