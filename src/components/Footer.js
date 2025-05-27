@@ -167,23 +167,7 @@ const Footer = () => {
           </FooterText>
           <SocialLinks>
             <SocialLink
-              href="https://facebook.com"
-              aria-label="Facebook"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaFacebook />
-            </SocialLink>
-            <SocialLink
-              href="https://twitter.com"
-              aria-label="Twitter"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaTwitter />
-            </SocialLink>
-            <SocialLink
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/company/credora-space/ "
               aria-label="LinkedIn"
               target="_blank"
               rel="noopener noreferrer"
@@ -191,7 +175,7 @@ const Footer = () => {
               <FaLinkedin />
             </SocialLink>
             <SocialLink
-              href="https://instagram.com"
+              href="https://www.instagram.com/credora.space/"
               aria-label="Instagram"
               target="_blank"
               rel="noopener noreferrer"
@@ -226,14 +210,13 @@ const Footer = () => {
               <ContactIcon>
                 <FaEnvelope />
               </ContactIcon>
-              <span>support@credora.com</span>
+              <span>info@credora.space</span>
             </ContactItem>
             <Address>
-              Credora Headquarters
+              Credora Inc.
               <br />
-              123 Education Street
-              <br />
-              Tech City, TC 45678
+              Phone: +91 7588788403 <br />
+              Wardha, 442001
             </Address>
           </ContactInfo>
         </FooterSection>
