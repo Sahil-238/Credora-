@@ -1645,13 +1645,35 @@ const Wrapper = styled.div`
 `;
 
 // HERO SECTION
+const VideoBackground = styled.video`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 0;
+  object-fit: cover;
+  opacity: 0.6;
+`;
+
+const VideoOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.85) 50%, rgba(51, 65, 85, 0.85) 100%);
+  z-index: 1;
+`;
+
 const HeroSection = styled.section`
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
   overflow: hidden;
 `;
 
@@ -1754,7 +1776,7 @@ const TrustItem = styled.div`
 
 // SECTIONS
 const Section = styled.section`
-  padding: 8rem 2rem;
+  padding: 4rem 2rem;
   position: relative;
 `;
 
@@ -1885,15 +1907,17 @@ const StatLabel = styled.div`
 const ProcessSectionBox = styled.div`
   background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   border-radius: 32px;
-  padding: 6rem 2rem;
-  margin: 6rem auto;
+  padding: 4rem 2rem;
+  margin: 3rem auto;
   max-width: 1200px;
 `;
 
 const ProcessGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
 `;
 
 const ProcessCard = styled.div`
@@ -2078,20 +2102,36 @@ const stats = [
 
 const process = [
   {
-    title: 'Discovery Call',
-    description: 'Deep-dive consultation to understand your vision and requirements',
+    title: 'Initial Consultation',
+    description: 'In-depth discovery call to understand your vision, goals, and technical requirements',
+  },
+  {
+    title: 'Requirements Analysis',
+    description: 'Detailed assessment of your needs, market analysis, and technology stack evaluation',
   },
   {
     title: 'Strategic Planning',
-    description: 'Custom solution architecture and expert team assembly',
+    description: 'Custom solution architecture, resource allocation, and milestone planning',
   },
   {
-    title: 'Flawless Execution',
-    description: 'Agile delivery with continuous communication and updates',
+    title: 'Team Assembly',
+    description: 'Handpicking expert developers, designers, and specialists for your project',
   },
   {
-    title: 'Ongoing Success',
-    description: 'Measurable results with dedicated support and optimization',
+    title: 'Agile Development',
+    description: 'Iterative development with regular sprints and continuous feedback integration',
+  },
+  {
+    title: 'Quality Assurance',
+    description: 'Rigorous testing, security audits, and performance optimization',
+  },
+  {
+    title: 'Deployment & Launch',
+    description: 'Smooth deployment process with zero-downtime and comprehensive documentation',
+  },
+  {
+    title: 'Ongoing Support',
+    description: 'Dedicated maintenance, 24/7 support, and continuous improvement cycles',
   },
 ];
 
@@ -2126,10 +2166,10 @@ const Home = () => {
       <Wrapper>
         {/* HERO SECTION */}
         <HeroSection>
-          <Blobs>
-            <Blob gradient={colors.gradient1} size="300px" top="10%" right="15%" duration={8} />
-            <Blob gradient={colors.gradient2} size="250px" bottom="20%" left="10%" duration={6} />
-          </Blobs>
+          <VideoBackground autoPlay loop muted playsInline>
+            <source src="/bidieo/credoramain.mp4" type="video/mp4" />
+          </VideoBackground>
+          <VideoOverlay />
           <HeroContent>
             <HeroTitle
               initial={{ opacity: 0, y: 60 }}
@@ -2196,7 +2236,7 @@ const Home = () => {
                   <BenefitsList>
                     {service.benefits.map((b, idx) => (
                       <BenefitItem key={idx}>
-                        <FaCheckCircle style={{ color: '#10b981', minWidth: '16px' }} /> {b}
+                        <FaCheckCircle style={{ color: '#10b981', minWidth: '14px' }} /> {b}
                       </BenefitItem>
                     ))}
                   </BenefitsList>

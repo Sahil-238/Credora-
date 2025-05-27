@@ -893,7 +893,7 @@ const Internships = () => {
           <Blob gradient={colors.gradient2} size="230px" bottom="17%" left="10%" duration={6} />
         </Blobs>
         <StyledImg
-          src="/images/internships-hero.jpg"
+          src="/images/bg.jpg"
           alt="Students working on internships"
         />
         <HeroContent>
