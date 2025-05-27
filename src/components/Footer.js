@@ -1,392 +1,253 @@
-// // src/components/Footer.js
-// import React from 'react';
-// import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaEnvelope } from 'react-icons/fa';
+import React from "react";
+import styled, { css } from "styled-components";
+import {
+  FaFacebook,
+  FaTwitter,
+  FaLinkedin,
+  FaInstagram,
+  FaEnvelope,
+} from "react-icons/fa";
 
-// const Footer = () => {
-//   return (
-//     <footer style={footerStyle}>
-//       <div style={footerContent}>
-//         <div style={footerSection}>
-//           <h3 style={sectionTitle}>Credora</h3>
-//           <p style={footerText}>Empowering students through industry-aligned internships and certifications</p>
-//           <div style={socialLinks}>
-//             <a href="https://facebook.com" aria-label="Facebook" style={socialLink}>
-//               <FaFacebook />
-//             </a>
-//             <a href="https://twitter.com" aria-label="Twitter" style={socialLink}>
-//               <FaTwitter />
-//             </a>
-//             <a href="https://linkedin.com" aria-label="LinkedIn" style={socialLink}>
-//               <FaLinkedin />
-//             </a>
-//             <a href="https://instagram.com" aria-label="Instagram" style={socialLink}>
-//               <FaInstagram />
-//             </a>
-//           </div>
-//         </div>
-
-//         <div style={footerSection}>
-//           <h3 style={sectionTitle}>Quick Links</h3>
-//           <ul style={linkList}>
-//             <li><a href="/about" style={footerLink}>About Us</a></li>
-//             <li><a href="/internships" style={footerLink}>Internships</a></li>
-//             <li><a href="/verify" style={footerLink}>Verify Certificate</a></li>
-//             <li><a href="/contact" style={footerLink}>Contact</a></li>
-//           </ul>
-//         </div>
-
-//         <div style={footerSection}>
-//           <h3 style={sectionTitle}>Contact Us</h3>
-//           <div style={contactInfo}>
-//             <div style={contactItem}>
-//               <FaEnvelope style={contactIcon} />
-//               <span>support@credora.com</span>
-//             </div>
-//             <p style={address}>Credora Headquarters<br/>
-//             123 Education Street<br/>
-//             Tech City, TC 45678</p>
-//           </div>
-//         </div>
-//       </div>
-
-//       <div style={copyright}>
-//         © {new Date().getFullYear()} Credora. All rights reserved.<br/>
-//         <div style={legalLinks}>
-//           <a href="/privacy" style={legalLink}>Privacy Policy</a> | 
-//           <a href="/terms" style={legalLink}>Terms of Service</a>
-//         </div>
-//       </div>
-//     </footer>
-//   );
-// };
-
-// // Design System Integration
-// const colors = {
-//   primary: '#2563eb',
-//   secondary: '#0d9488',
-//   background: '#f8fafc',
-//   text: '#1e293b',
-//   lightText: '#64748b',
-//   border: '#e2e8f0'
-// };
-
-// const spacing = {
-//   small: '8px',
-//   medium: '16px',
-//   large: '24px',
-//   xlarge: '48px'
-// };
-
-// const fonts = {
-//   primary: "'Inter', sans-serif",
-//   heading: "'Poppins', sans-serif"
-// };
-
-// // Styles
-// const footerStyle = {
-//   backgroundColor: colors.background,
-//   padding: spacing.xlarge,
-//   marginTop: spacing.xlarge,
-//   borderTop: `1px solid ${colors.border}`
-// };
-
-// const footerContent = {
-//   maxWidth: '1200px',
-//   margin: '0 auto',
-//   display: 'grid',
-//   gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-//   gap: spacing.xlarge,
-//   paddingBottom: spacing.xlarge
-// };
-
-// const footerSection = {
-//   padding: spacing.medium
-// };
-
-// const sectionTitle = {
-//   fontFamily: fonts.heading,
-//   fontSize: '1.25rem',
-//   marginBottom: spacing.medium,
-//   color: colors.text
-// };
-
-// const footerText = {
-//   fontSize: '0.9rem',
-//   lineHeight: 1.6,
-//   color: colors.lightText
-// };
-
-// const socialLinks = {
-//   display: 'flex',
-//   gap: spacing.medium,
-//   marginTop: spacing.medium
-// };
-
-// const socialLink = {
-//   color: colors.lightText,
-//   fontSize: '1.5rem',
-//   transition: 'color 0.2s',
-//   ':hover': {
-//     color: colors.primary
-//   }
-// };
-
-// const linkList = {
-//   listStyle: 'none',
-//   padding: 0,
-//   margin: 0
-// };
-
-// const footerLink = {
-//   color: colors.lightText,
-//   textDecoration: 'none',
-//   fontSize: '0.9rem',
-//   marginBottom: spacing.small,
-//   display: 'block',
-//   transition: 'color 0.2s',
-//   ':hover': {
-//     color: colors.primary
-//   }
-// };
-
-// const contactInfo = {
-//   marginTop: spacing.small
-// };
-
-// const contactItem = {
-//   display: 'flex',
-//   alignItems: 'center',
-//   gap: spacing.small,
-//   marginBottom: spacing.small,
-//   color: colors.lightText
-// };
-
-// const contactIcon = {
-//   fontSize: '1.2rem'
-// };
-
-// const address = {
-//   ...footerText,
-//   marginTop: spacing.medium
-// };
-
-// const copyright = {
-//   textAlign: 'center',
-//   paddingTop: spacing.xlarge,
-//   borderTop: `1px solid ${colors.border}`,
-//   color: colors.lightText,
-//   fontSize: '0.9rem'
-// };
-
-// const legalLinks = {
-//   marginTop: spacing.small
-// };
-
-// const legalLink = {
-//   color: colors.lightText,
-//   textDecoration: 'none',
-//   margin: `0 ${spacing.small}`,
-//   ':hover': {
-//     color: colors.primary
-//   }
-// };
-
-// export default Footer;
-
-// src/components/Footer.js
-import React from 'react';
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaEnvelope } from 'react-icons/fa';
-
-const Footer = () => {
-  return (
-    <footer style={footerStyle}>
-      <div style={footerContent}>
-        <div style={footerSection}>
-          <h3 style={sectionTitle}>Credora</h3>
-          <p style={footerText}>Empowering students through industry-aligned internships and certifications</p>
-          <div style={socialLinks}>
-            <a href="https://facebook.com" aria-label="Facebook" style={socialLink}>
-              <FaFacebook />
-            </a>
-            <a href="https://twitter.com" aria-label="Twitter" style={socialLink}>
-              <FaTwitter />
-            </a>
-            <a href="https://linkedin.com" aria-label="LinkedIn" style={socialLink}>
-              <FaLinkedin />
-            </a>
-            <a href="https://instagram.com" aria-label="Instagram" style={socialLink}>
-              <FaInstagram />
-            </a>
-          </div>
-        </div>
-
-        <div style={footerSection}>
-          <h3 style={sectionTitle}>Quick Links</h3>
-          <ul style={linkList}>
-            <li><a href="/about" style={footerLink}>About Us</a></li>
-            <li><a href="/internships" style={footerLink}>Internships</a></li>
-            <li><a href="/verify-certificate" style={footerLink}>Verify Certificate</a></li>
-            <li><a href="/contact" style={footerLink}>Contact</a></li>
-          </ul>
-        </div>
-
-        <div style={footerSection}>
-          <h3 style={sectionTitle}>Contact Us</h3>
-          <div style={contactInfo}>
-            <div style={contactItem}>
-              <FaEnvelope style={contactIcon} />
-              <span>support@credora.com</span>
-            </div>
-            <p style={address}>Credora Headquarters<br/>
-            123 Education Street<br/>
-            Tech City, TC 45678</p>
-          </div>
-        </div>
-      </div>
-
-      <div style={copyright}>
-        © {new Date().getFullYear()} Credora. All rights reserved.<br/>
-        <div style={legalLinks}>
-          <a href="/privacy" style={legalLink}>Privacy Policy</a> | 
-          <a href="/terms" style={legalLink}>Terms of Service</a>
-        </div>
-      </div>
-    </footer>
-  );
-};
-
-// Design System Integration
+// DESIGN SYSTEM
 const colors = {
-  primary: '#2563eb',
-  secondary: '#0d9488',
-  background: '#f8fafc',
-  text: '#1e293b',
-  lightText: '#64748b',
-  border: '#e2e8f0'
-};
-
-const spacing = {
-  small: '8px',
-  medium: '16px',
-  large: '24px',
-  xlarge: '48px'
+  primary: "#6366f1",
+  secondary: "#8b5cf6",
+  background: "#1e293b",
+  lightBg: "#0f172a",
+  text: "#f8fafc",
+  muted: "#94a3b8",
+  border: "#334155",
+  accent: "#f59e0b",
 };
 
 const fonts = {
   primary: "'Inter', sans-serif",
-  heading: "'Poppins', sans-serif"
+  heading: "'Poppins', sans-serif",
 };
 
-// Styles
-const footerStyle = {
-  backgroundColor: colors.background,
-  padding: spacing.xlarge,
-  marginTop: spacing.xlarge,
-  borderTop: `1px solid ${colors.border}`,
-  borderTopLeftRadius: '50px', // Add curve to the top-left corner
-  borderTopRightRadius: '50px', // Add curve to the top-right corner
-  overflow: 'hidden', // Ensure the curve is visible
-};
+// STYLED COMPONENTS
+const FooterWrapper = styled.footer`
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 85%, #334155 100%);
+  padding: 4rem 1.5rem 3rem 1.5rem;
+  margin-top: 5rem;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  overflow: hidden;
+  border-top: 1.5px solid ${colors.border};
+  color: ${colors.text};
+  font-family: ${fonts.primary};
+  position: relative;
+`;
 
-const footerContent = {
-  maxWidth: '1200px',
-  margin: '0 auto',
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-  gap: spacing.xlarge,
-  paddingBottom: spacing.xlarge
-};
+const FooterContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 2.5rem;
+  padding-bottom: 2.8rem;
 
-const footerSection = {
-  padding: spacing.medium
-};
-
-const sectionTitle = {
-  fontFamily: fonts.heading,
-  fontSize: '1.25rem',
-  marginBottom: spacing.medium,
-  color: colors.text
-};
-
-const footerText = {
-  fontSize: '0.9rem',
-  lineHeight: 1.6,
-  color: colors.lightText
-};
-
-const socialLinks = {
-  display: 'flex',
-  gap: spacing.medium,
-  marginTop: spacing.medium
-};
-
-const socialLink = {
-  color: colors.lightText,
-  fontSize: '1.5rem',
-  transition: 'color 0.2s',
-  ':hover': {
-    color: colors.primary
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
-};
+`;
 
-const linkList = {
-  listStyle: 'none',
-  padding: 0,
-  margin: 0
-};
+const FooterSection = styled.div`
+  padding: 1rem 0.5rem 0 0.5rem;
+`;
 
-const footerLink = {
-  color: colors.lightText,
-  textDecoration: 'none',
-  fontSize: '0.9rem',
-  marginBottom: spacing.small,
-  display: 'block',
-  transition: 'color 0.2s',
-  ':hover': {
-    color: colors.primary
+const SectionTitle = styled.h3`
+  font-family: ${fonts.heading};
+  font-size: 1.22rem;
+  margin-bottom: 1.2rem;
+  color: #fff;
+  letter-spacing: 0.01em;
+`;
+
+const FooterText = styled.p`
+  font-size: 0.96rem;
+  color: ${colors.muted};
+  margin-bottom: 0;
+  line-height: 1.6;
+  max-width: 300px;
+`;
+
+const SocialLinks = styled.div`
+  display: flex;
+  gap: 1.1rem;
+  margin-top: 1.2rem;
+`;
+
+const iconHover = css`
+  color: ${colors.muted};
+  font-size: 1.45rem;
+  transition: color 0.22s;
+  &:hover {
+    color: ${colors.primary};
   }
-};
+`;
 
-const contactInfo = {
-  marginTop: spacing.small
-};
+const SocialLink = styled.a`
+  ${iconHover}
+`;
 
-const contactItem = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: spacing.small,
-  marginBottom: spacing.small,
-  color: colors.lightText
-};
+const LinkList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
 
-const contactIcon = {
-  fontSize: '1.2rem'
-};
-
-const address = {
-  ...footerText,
-  marginTop: spacing.medium
-};
-
-const copyright = {
-  textAlign: 'center',
-  paddingTop: spacing.xlarge,
-  borderTop: `1px solid ${colors.border}`,
-  color: colors.lightText,
-  fontSize: '0.9rem'
-};
-
-const legalLinks = {
-  marginTop: spacing.small
-};
-
-const legalLink = {
-  color: colors.lightText,
-  textDecoration: 'none',
-  margin: `0 ${spacing.small}`,
-  ':hover': {
-    color: colors.primary
+const FooterLink = styled.a`
+  color: ${colors.muted};
+  text-decoration: none;
+  font-size: 0.99rem;
+  margin-bottom: 0.6rem;
+  display: block;
+  transition: color 0.2s;
+  &:hover {
+    color: ${colors.primary};
   }
+`;
+
+const ContactInfo = styled.div`
+  margin-top: 0.4rem;
+`;
+
+const ContactItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.45rem;
+  color: ${colors.muted};
+  font-size: 0.98rem;
+`;
+
+const ContactIcon = styled.span`
+  font-size: 1.12rem;
+`;
+
+const Address = styled.p`
+  font-size: 0.95rem;
+  color: ${colors.muted};
+  margin-top: 1.1rem;
+  line-height: 1.5;
+`;
+
+const Copyright = styled.div`
+  text-align: center;
+  padding-top: 2.5rem;
+  border-top: 1.5px solid ${colors.border};
+  color: ${colors.muted};
+  font-size: 0.98rem;
+`;
+
+const LegalLinks = styled.div`
+  margin-top: 0.7rem;
+`;
+
+const LegalLink = styled.a`
+  color: ${colors.muted};
+  text-decoration: none;
+  margin: 0 0.7rem;
+  transition: color 0.2s;
+  &:hover {
+    color: ${colors.primary};
+  }
+`;
+
+const Footer = () => {
+  return (
+    <FooterWrapper>
+      <FooterContent>
+        <FooterSection>
+          <SectionTitle>Credora</SectionTitle>
+          <FooterText>
+            Empowering students through industry-aligned internships and certifications.
+          </FooterText>
+          <SocialLinks>
+            <SocialLink
+              href="https://facebook.com"
+              aria-label="Facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebook />
+            </SocialLink>
+            <SocialLink
+              href="https://twitter.com"
+              aria-label="Twitter"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaTwitter />
+            </SocialLink>
+            <SocialLink
+              href="https://linkedin.com"
+              aria-label="LinkedIn"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaLinkedin />
+            </SocialLink>
+            <SocialLink
+              href="https://instagram.com"
+              aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram />
+            </SocialLink>
+          </SocialLinks>
+        </FooterSection>
+
+        <FooterSection>
+          <SectionTitle>Quick Links</SectionTitle>
+          <LinkList>
+            <li>
+              <FooterLink href="/about">About Us</FooterLink>
+            </li>
+            <li>
+              <FooterLink href="/internships">Internships</FooterLink>
+            </li>
+            <li>
+              <FooterLink href="/verify-certificate">Verify Certificate</FooterLink>
+            </li>
+            <li>
+              <FooterLink href="/contact">Contact</FooterLink>
+            </li>
+          </LinkList>
+        </FooterSection>
+
+        <FooterSection>
+          <SectionTitle>Contact Us</SectionTitle>
+          <ContactInfo>
+            <ContactItem>
+              <ContactIcon>
+                <FaEnvelope />
+              </ContactIcon>
+              <span>support@credora.com</span>
+            </ContactItem>
+            <Address>
+              Credora Headquarters
+              <br />
+              123 Education Street
+              <br />
+              Tech City, TC 45678
+            </Address>
+          </ContactInfo>
+        </FooterSection>
+      </FooterContent>
+
+      <Copyright>
+        © {new Date().getFullYear()} Credora. All rights reserved.
+        <LegalLinks>
+          <LegalLink href="/privacy">Privacy Policy</LegalLink> |{" "}
+          <LegalLink href="/terms">Terms of Service</LegalLink>
+        </LegalLinks>
+      </Copyright>
+    </FooterWrapper>
+  );
 };
 
 export default Footer;

@@ -1,9 +1,508 @@
+// import React, { useState, useEffect, useCallback, useRef } from 'react';
+// import { motion, AnimatePresence } from 'framer-motion';
+// import { 
+//   FaRobot, FaTimes, FaHome, FaInfoCircle, FaBriefcase, 
+//   FaCertificate, FaThumbsUp, FaThumbsDown, FaRegSmile
+// } from 'react-icons/fa';
+
+// const ChatBot = () => {
+//   const [isOpen, setIsOpen] = useState(false);
+//   const [messages, setMessages] = useState([]);
+//   const [input, setInput] = useState('');
+//   const [isTyping, setIsTyping] = useState(false);
+//   const [showOptions, setShowOptions] = useState(true);
+//   const [feedbackStates, setFeedbackStates] = useState({});
+//   const messagesEndRef = useRef(null);
+
+//   const quickOptions = [
+//     { icon: <FaHome />, text: "Tell me about Credora" },
+//     { icon: <FaBriefcase />, text: "Available internships" },
+//     { icon: <FaCertificate />, text: "Certificate verification" },
+//     { icon: <FaInfoCircle />, text: "Meet the team" }
+//   ];
+//     // RL Policy Management
+//     const rlPolicy = useRef({
+//       explorationRate: 0.2,
+//       get shouldExplore() {
+//         return Math.random() < this.explorationRate;
+//       }
+//     });
+  
+//     const scrollToBottom = () => {
+//       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+//     };
+
+//   const formatBotResponse = (response) => {
+//     return response
+//       .split('\n')
+//       .map(line => line.trim())
+//       .filter(line => line)
+//       .join('\n\n');
+//   };
+
+//   const addMessage = useCallback((text, sender) => {
+//     const formattedText = sender === 'bot' ? formatBotResponse(text) : text;
+//     setMessages(prev => [...prev, { text: formattedText, sender, id: Date.now() }]);
+//   }, []);
+//     // RL Feedback Handler
+//     const handleFeedback = async (messageId, isHelpful) => {
+//       try {
+//         const response = await fetch(`/api/chat/feedback/${messageId}`, {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify({ helpful: isHelpful })
+//         });
+        
+//         if (response.ok) {
+//           setFeedbackStates(prev => ({
+//             ...prev,
+//             [messageId]: isHelpful ? 'helpful' : 'unhelpful'
+//           }));
+          
+//           // Adjust exploration rate based on feedback
+//           rlPolicy.current.explorationRate = Math.max(
+//             0.1,
+//             rlPolicy.current.explorationRate * (isHelpful ? 0.95 : 1.05)
+//           );
+//         }
+//       } catch (error) {
+//         console.error('Feedback submission failed:', error);
+//       }
+//     };
+  
+//     // RL Response Selection
+//     const getRLResponse = async (userMessage) => {
+//       try {
+//         const response = await fetch(
+//           `/api/chat/similar?query=${encodeURIComponent(userMessage)}&helpful=true`
+//         );
+//         const similarResponses = await response.json();
+        
+//         if (similarResponses.length > 0 && !rlPolicy.current.shouldExplore) {
+//           // Select best response based on RL score
+//           const bestResponse = similarResponses[0].bot_response;
+//           await recordResponseUsage(similarResponses[0].id);
+//           return bestResponse;
+//         }
+//       } catch (error) {
+//         console.error('RL response fetch failed:', error);
+//       }
+//       return null;
+//     };
+  
+//     const recordResponseUsage = async (interactionId) => {
+//       try {
+//         await fetch(`/api/chat/interaction/${interactionId}/usage`, {
+//           method: 'POST'
+//         });
+//       } catch (error) {
+//         console.error('Usage recording failed:', error);
+//       }
+//     };
+
+//   const hasGreeted = useRef(false);
+//   useEffect(() => {
+//     if (!hasGreeted.current) {
+//       hasGreeted.current = true;
+//       setIsOpen(true);
+//       setTimeout(() => {
+//         addMessage("Hello! I'm Credora Assist. How may I help you today?", 'bot');
+//       }, 1000);
+//     }
+//   }, [addMessage]);
+
+//   const handleQuickOption = (option) => {
+//     addMessage(option.text, 'user');
+//     handleBotResponse(option.text);
+//   };
+
+//   const handleBotResponse = async (userMessage) => {
+//     setIsTyping(true);
+//     const msg = userMessage.trim().toLowerCase();
+
+//     // Custom replies for greetings and thanks
+//     if (["hi", "hello", "hey"].includes(msg)) {
+//       addMessage("Hello! How can I assist you today?", 'bot');
+//       setIsTyping(false);
+//       return;
+//     }
+
+//     if (["thank you", "thanks", "ty", "thankyou"].includes(msg)) {
+//       addMessage("You're welcome! Let me know if there's anything else I can help with.", 'bot');
+//       setIsTyping(false);
+//       return;
+//     }
+
+//     try {
+//       const systemPrompt = `You are Credora Assist, a professional and helpful AI assistant for Credora. Here's updated information about Credora also display the link of WhatsApp and LinkedIn whenever needed:
+
+// - Credora is a dynamic and fast-growing internship platform dedicated to empowering students and early-career professionals.
+// - Located in Wardha, Maharashtra.
+// - Founders: Sahil Dhawale (Founder), Nayan Raut (Co-Founder), Aniket Kumare (HR).
+// - Offers internships in domains like Web Development (Frontend, Backend, Full Stack), Mobile App Development (iOS, Android, Flutter), Data Science (Machine Learning, Artificial Intelligence, Deep Learning), Data Analysis (Visualization, Reporting, Excel, Python), Content Writing (Blogs, Technical Writing, SEO), Human Resources (Recruitment, Talent Acquisition), Social Media Marketing (Strategy, Content Creation, Growth Hacking), Business Development (Sales, Market Research, CRM Management), and Graphic Designing (Branding, UI/UX Design, Visual Storytelling).
+// - Internships are remote, providing unmatched flexibility and real-world experience.
+// - Certificates are awarded upon successful completion of the program.
+// - Frequently Asked Questions (FAQs) include details about application processes, tasks, certificates, and more.
+// - Contact: hr@credora.space / aniket@credora.space.
+// - Welcome to Credora: Your Ultimate Internship Journey!
+// - Location: Wardha, Maharashtra
+// - Our Team:
+// - Sahil Dhawale - Founder
+// - Nayan Raut - Co-Founder
+// - Aniket Kumare - HR
+// - About Credora:
+// - Credora is a dynamic and fast-growing internship platform dedicated to empowering students and early-career professionals. We offer practical, hands-on exposure across a wide variety of in-demand domains. Our internships are conducted entirely remotely, giving participants unmatched flexibility, real-world work experience, and the opportunity to build strong portfolios. Each intern not only sharpens their skills but also earns certificates that significantly boost their career profiles.
+// - At Credora, we believe in nurturing talent, providing mentorship, and creating a vibrant, engaging learning environment.
+// - Domains Offered at Credora:
+// - Web Development (Frontend, Backend, Full Stack)
+// - Mobile App Development (iOS, Android, Flutter)
+// - Data Science (Machine Learning, Artificial Intelligence, Deep Learning)
+// - Data Analysis (Visualization, Reporting, Excel, Python)
+// - Content Writing (Blogs, Technical Writing, SEO)
+// - Human Resources (Recruitment, Talent Acquisition)
+// - Social Media Marketing (Strategy, Content Creation, Growth Hacking)
+// - Business Development (Sales, Market Research, CRM Management)
+// - Graphic Designing (Branding, UI/UX Design, Visual Storytelling)
+// - Frequently Asked Questions (FAQs):
+// - Q1: What is Credora?
+// - Credora is your gateway to premium internship programs across multiple professional fields. We help you build a solid career foundation through live projects, continuous mentorship, industry-aligned tasks, and recognized certifications.
+// - Q2: Are the internships paid?
+// - Most of our internships are currently unpaid but packed with value! You gain mentorship, real-world exposure, portfolio-building projects, personalized feedback, certificates, and even opportunities to win bonuses through competitions.
+// - Q3: How can I apply for an internship?
+// - You can apply by filling out our Internship Interest Forms, available through LinkedIn posts, WhatsApp broadcasts, and other community groups. Selected candidates will receive an official offer letter via email.
+// - Q4: I didn't receive my offer letter. What should I do?
+// - First, check your spam or junk mail folders. If not found, it’s possible your application was submitted after the first batch of selections. Stay tuned for further opportunities!
+// - Q5: What tasks will I have to complete?
+// - Tasks are assigned weekly, simulating real-world work scenarios. They are designed to be moderately challenging, helping you upskill while building an impressive portfolio.
+// - Q6: How are tasks submitted?
+// - You’ll receive weekly submission links (Google Forms or portal links) through your domain-specific WhatsApp groups.
+// - Q7: Will I receive a certificate?
+// - Absolutely! Upon successful completion of the internship, fulfilling all submission and participation requirements, you’ll receive a verified digital certificate.
+// - Q8: How can I connect with fellow interns?
+// - All interns are grouped into domain-specific WhatsApp groups for updates, discussions, collaboration, and query resolution. Plus, live meets and virtual workshops are organized regularly!
+// - Your Internship Journey at Credora:
+// - 1. Complete the Internship Interest Form.
+// - 2. Await shortlisting and receive your official offer letter.
+// - 3. Join your domain-specific WhatsApp group.
+// - 4. Receive and complete weekly tasks and assignments.
+// - 5. Submit tasks by the specified deadlines.
+// - 6. Participate in live meets, webinars, and Q&A sessions.
+// - 7. Successfully complete the program and receive your certificate!
+// - Important Reminders for Interns:
+// - Check your email (including spam folders) regularly for updates.
+// - Stay responsive and active in all communication channels.
+// - Meet deadlines diligently to qualify for certifications.
+// - Engage with your peers and mentors actively.
+// - Follow Credora on LinkedIn for exclusive news, updates, and tips.
+// - Special Engagement Activities:
+// - LinkedIn Profile Update: Add "Credora Intern" to your LinkedIn Experience section.
+// - Social Media Challenge: Post your offer letter, tag Credora, and get a chance to win Amazon vouchers worth ₹1000!
+// - Hackathons & Contests: Join our exclusive hackathons and competitions to win exciting prizes and bonus certificates.
+// - Leaderboards: Top performers get special recognition on our LinkedIn page and other bonus rewards!
+// - Contact and Support:
+// - Official Email: hr@credora.space / aniket@credora.space
+// - LinkedIn: https://www.linkedin.com/company/credora-space
+// - WhatsApp: https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb Invitation links are sent along with offer letters. Join early to stay informed!
+// - Thank You for Choosing Credora!
+// - We are excited to have you onboard. Get ready to explore, learn, innovate, and grow. Your career journey starts here, and we're honored to be part of it. Let's create success together—one project, one skill, one achievement at a time!
+// - Welcome to the Credora Family!
+
+// Interaction Guidelines:
+// - Provide professional, concise, and relevant responses.
+// - Avoid unnecessary information unless explicitly asked.
+// - Use a warm and friendly tone while maintaining professionalism.
+// - For WhatsApp and LinkedIn links, provide clickable text like "Join WhatsApp group" or "See our LinkedIn page" that redirects users to the respective links in a new tab.
+// - Ensure responses are natural and human-like.`;
+
+//       const response = await fetch('https://api.together.xyz/v1/chat/completions', {
+//         method: 'POST',
+//         headers: {
+//           'Authorization': `Bearer ${process.env.REACT_APP_TOGETHER_API_KEY}`,
+//           'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//           model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
+//           messages: [
+//             { role: 'system', content: systemPrompt },
+//             { role: 'user', content: userMessage }
+//           ],
+//           temperature: 0.7,
+//           max_tokens: 500
+//         })
+//       });
+
+//       const data = await response.json();
+//       let botResponse = data.choices[0].message.content;
+
+//       // Replace links with clickable text
+//       botResponse = botResponse.replace(
+//         'https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb',
+//         '<a href="https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb" target="_blank" rel="noopener noreferrer">Join WhatsApp group</a>'
+//       );
+//       botResponse = botResponse.replace(
+//         'https://www.linkedin.com/company/credora-space',
+//         '<a href="https://www.linkedin.com/company/credora-space" target="_blank" rel="noopener noreferrer">See our LinkedIn page</a>'
+//       );
+
+//       addMessage(botResponse, 'bot');
+//     } catch (error) {
+//       addMessage('Sorry, I encountered an error. Please try again later.', 'bot');
+//     }
+
+//     setIsTyping(false);
+//     setShowOptions(false);
+//   };
+
+//   const handleSend = async () => {
+//     if (!input.trim()) return;
+//     addMessage(input, 'user');
+//     setInput('');
+//     await handleBotResponse(input);
+//   };
+
+//   const styles = {
+//     container: {
+//       position: 'fixed',
+//       bottom: '20px',
+//       right: '20px',
+//       zIndex: 1000,
+//     },
+//     chatIcon: {
+//       backgroundColor: '#2563eb',
+//       borderRadius: '50%',
+//       width: '60px',
+//       height: '60px',
+//       display: 'flex',
+//       alignItems: 'center',
+//       justifyContent: 'center',
+//       cursor: 'pointer',
+//       color: 'white',
+//       boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+//     },
+//     chatWindow: {
+//       position: 'absolute',
+//       bottom: '80px',
+//       right: '0',
+//       width: '350px',
+//       height: '500px',
+//       backgroundColor: 'white',
+//       borderRadius: '12px',
+//       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+//       overflow: 'hidden',
+//       display: 'flex',
+//       flexDirection: 'column',
+//     },
+//     header: {
+//       backgroundColor: '#2563eb',
+//       padding: '16px',
+//       color: 'white',
+//       display: 'flex',
+//       justifyContent: 'space-between',
+//       alignItems: 'center',
+//     },
+//     messagesContainer: {
+//       flex: 1,
+//       overflowY: 'auto',
+//       padding: '16px',
+//       scrollBehavior: 'smooth',
+//     },
+//     message: {
+//       marginBottom: '16px',
+//       maxWidth: '80%',
+//       padding: '12px',
+//       borderRadius: '8px',
+//       whiteSpace: 'pre-wrap',
+//     },
+//     userMessage: {
+//       backgroundColor: '#2563eb',
+//       color: 'white',
+//       marginLeft: 'auto',
+//     },
+//     botMessage: {
+//       backgroundColor: '#f8fafc',
+//       color: '#1e293b',
+//     },
+//     quickOptions: {
+//       display: 'grid',
+//       gridTemplateColumns: '1fr 1fr',
+//       gap: '8px',
+//       padding: '16px',
+//     },
+//     quickOption: {
+//       display: 'flex',
+//       alignItems: 'center',
+//       gap: '8px',
+//       padding: '12px',
+//       backgroundColor: '#f8fafc',
+//       border: '1px solid #e2e8f0',
+//       borderRadius: '8px',
+//       cursor: 'pointer',
+//       fontSize: '14px',
+//       transition: 'all 0.2s',
+//     },
+//     inputContainer: {
+//       padding: '16px',
+//       borderTop: '1px solid #e2e8f0',
+//       display: 'flex',
+//       gap: '8px',
+//     },
+//     input: {
+//       flex: 1,
+//       padding: '12px',
+//       borderRadius: '8px',
+//       border: '1px solid #e2e8f0',
+//       fontSize: '14px',
+//     },
+//     sendButton: {
+//       backgroundColor: '#2563eb',
+//       color: 'white',
+//       border: 'none',
+//       borderRadius: '8px',
+//       padding: '12px 24px',
+//       cursor: 'pointer',
+//     },
+//   };
+
+//   return (
+//     <div style={styles.container}>
+//       <motion.div
+//         whileHover={{ scale: 1.1 }}
+//         whileTap={{ scale: 0.9 }}
+//         onClick={() => setIsOpen(true)}
+//         style={styles.chatIcon}
+//       >
+//         <FaRobot size={28} />
+//       </motion.div>
+
+//       <AnimatePresence>
+//         {isOpen && (
+//           <motion.div
+//             initial={{ opacity: 0, y: 20, scale: 0.95 }}
+//             animate={{ opacity: 1, y: 0, scale: 1 }}
+//             exit={{ opacity: 0, y: 20, scale: 0.95 }}
+//             transition={{ duration: 0.2 }}
+//             style={styles.chatWindow}
+//           >
+//             <div style={styles.header}>
+//               <h3>Credora Assist</h3>
+//               <FaTimes
+//                 style={{ cursor: 'pointer' }}
+//                 onClick={() => setIsOpen(false)}
+//               />
+//             </div>
+//             <div style={styles.messagesContainer}>
+//               {messages.map(message => (
+//                 <div
+//                   key={message.id}
+//                   style={{
+//                     ...styles.message,
+//                     ...(message.sender === 'user' ? styles.userMessage : styles.botMessage),
+//                   }}
+//                   dangerouslySetInnerHTML={{ __html: message.text }}
+//                 />
+//               ))}
+//               {isTyping && (
+//                 <div style={{ ...styles.message, ...styles.botMessage }}>
+//                   Typing...
+//                 </div>
+//               )}
+//             </div>
+//             {showOptions && (
+//               <div style={styles.quickOptions}>
+//                 {quickOptions.map((option, index) => (
+//                   <div
+//                     key={index}
+//                     style={styles.quickOption}
+//                     onClick={() => handleQuickOption(option)}
+//                   >
+//                     {option.icon}
+//                     <span>{option.text}</span>
+//                   </div>
+//                 ))}
+//               </div>
+//             )}
+//             <div style={styles.inputContainer}>
+//               <input
+//                 type="text"
+//                 value={input}
+//                 onChange={(e) => setInput(e.target.value)}
+//                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+//                 placeholder="Type your message..."
+//                 style={styles.input}
+//               />
+//               <button onClick={handleSend} style={styles.sendButton}>
+//                 Send
+//               </button>
+//             </div>
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+//     </div>
+//   );
+// };
+
+// export default ChatBot;
+
+
+
+
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaRobot, FaTimes, FaHome, FaInfoCircle, FaBriefcase, 
-  FaCertificate, FaThumbsUp, FaThumbsDown, FaRegSmile
+  FaCertificate, FaThumbsUp, FaThumbsDown
 } from 'react-icons/fa';
+
+// Modern color palette and fonts
+const colors = {
+  primary: "#6366f1",
+  secondary: "#8b5cf6",
+  accent: "#f59e0b",
+  background: "#fff",
+  dark: "#0f172a",
+  border: "#e2e8f0",
+  light: "#f8fafc",
+  glass: "rgba(99,102,241,0.08)",
+};
+
+const fonts = {
+  primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+  heading: "'Poppins', 'Inter', sans-serif"
+};
+
+const quickOptions = [
+  { icon: <FaHome />, text: "Tell me about Credora" },
+  { icon: <FaBriefcase />, text: "Available internships" },
+  { icon: <FaCertificate />, text: "Certificate verification" },
+  { icon: <FaInfoCircle />, text: "Meet the team" }
+];
+
+// Feedback icons
+const FeedbackButton = ({ onClick, active, type, disabled }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    style={{
+      border: "none",
+      background: "transparent",
+      cursor: "pointer",
+      marginLeft: type === "up" ? 0 : 8,
+      color:
+        active === "helpful"
+          ? "#22c55e"
+          : active === "unhelpful"
+            ? "#ef4444"
+            : "#64748b",
+      fontSize: "1.2rem",
+      opacity: disabled ? 0.4 : 1,
+      transition: "color 0.2s"
+    }}
+    aria-label={type === "up" ? "Mark as helpful" : "Mark as not helpful"}
+  >
+    {type === "up" ? <FaThumbsUp /> : <FaThumbsDown />}
+  </button>
+);
 
 const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,23 +513,18 @@ const ChatBot = () => {
   const [feedbackStates, setFeedbackStates] = useState({});
   const messagesEndRef = useRef(null);
 
-  const quickOptions = [
-    { icon: <FaHome />, text: "Tell me about Credora" },
-    { icon: <FaBriefcase />, text: "Available internships" },
-    { icon: <FaCertificate />, text: "Certificate verification" },
-    { icon: <FaInfoCircle />, text: "Meet the team" }
-  ];
-    // RL Policy Management
-    const rlPolicy = useRef({
-      explorationRate: 0.2,
-      get shouldExplore() {
-        return Math.random() < this.explorationRate;
-      }
-    });
-  
-    const scrollToBottom = () => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
+  // RL Policy Management
+  const rlPolicy = useRef({
+    explorationRate: 0.2,
+    get shouldExplore() {
+      return Math.random() < this.explorationRate;
+    }
+  });
+
+  // Scroll to bottom on new message
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isTyping]);
 
   const formatBotResponse = (response) => {
     return response
@@ -40,380 +534,346 @@ const ChatBot = () => {
       .join('\n\n');
   };
 
-  const addMessage = useCallback((text, sender) => {
+  const addMessage = useCallback((text, sender, id = Date.now()) => {
     const formattedText = sender === 'bot' ? formatBotResponse(text) : text;
-    setMessages(prev => [...prev, { text: formattedText, sender, id: Date.now() }]);
+    setMessages(prev => [...prev, { text: formattedText, sender, id }]);
   }, []);
-    // RL Feedback Handler
-    const handleFeedback = async (messageId, isHelpful) => {
-      try {
-        const response = await fetch(`/api/chat/feedback/${messageId}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ helpful: isHelpful })
-        });
-        
-        if (response.ok) {
-          setFeedbackStates(prev => ({
-            ...prev,
-            [messageId]: isHelpful ? 'helpful' : 'unhelpful'
-          }));
-          
-          // Adjust exploration rate based on feedback
-          rlPolicy.current.explorationRate = Math.max(
-            0.1,
-            rlPolicy.current.explorationRate * (isHelpful ? 0.95 : 1.05)
-          );
-        }
-      } catch (error) {
-        console.error('Feedback submission failed:', error);
-      }
-    };
-  
-    // RL Response Selection
-    const getRLResponse = async (userMessage) => {
-      try {
-        const response = await fetch(
-          `/api/chat/similar?query=${encodeURIComponent(userMessage)}&helpful=true`
-        );
-        const similarResponses = await response.json();
-        
-        if (similarResponses.length > 0 && !rlPolicy.current.shouldExplore) {
-          // Select best response based on RL score
-          const bestResponse = similarResponses[0].bot_response;
-          await recordResponseUsage(similarResponses[0].id);
-          return bestResponse;
-        }
-      } catch (error) {
-        console.error('RL response fetch failed:', error);
-      }
-      return null;
-    };
-  
-    const recordResponseUsage = async (interactionId) => {
-      try {
-        await fetch(`/api/chat/interaction/${interactionId}/usage`, {
-          method: 'POST'
-        });
-      } catch (error) {
-        console.error('Usage recording failed:', error);
-      }
-    };
 
+  // RL Feedback Handler
+  const handleFeedback = async (messageId, isHelpful) => {
+    try {
+      // Fake API call for feedback
+      // await fetch(`/api/chat/feedback/${messageId}`, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ helpful: isHelpful })
+      // });
+      setFeedbackStates(prev => ({
+        ...prev,
+        [messageId]: isHelpful ? 'helpful' : 'unhelpful'
+      }));
+      // Adjust exploration rate based on feedback
+      rlPolicy.current.explorationRate = Math.max(
+        0.1,
+        rlPolicy.current.explorationRate * (isHelpful ? 0.95 : 1.05)
+      );
+    } catch (error) {
+      // Feedback error can be ignored for UI
+    }
+  };
+
+  // RL Response Selection (not used, for future API integration)
+  // const getRLResponse = async (userMessage) => { ... }
+
+  // Only greet once per mount
   const hasGreeted = useRef(false);
   useEffect(() => {
     if (!hasGreeted.current) {
       hasGreeted.current = true;
       setIsOpen(true);
       setTimeout(() => {
-        addMessage("Hello! I'm Credora Assist. How may I help you today?", 'bot');
-      }, 1000);
+        addMessage(
+          "Hello! I'm Credora Assist. How may I help you today?",
+          "bot"
+        );
+      }, 800);
     }
   }, [addMessage]);
 
   const handleQuickOption = (option) => {
-    addMessage(option.text, 'user');
+    addMessage(option.text, "user");
     handleBotResponse(option.text);
   };
 
+  // Simulate bot response (add your API here)
   const handleBotResponse = async (userMessage) => {
     setIsTyping(true);
     const msg = userMessage.trim().toLowerCase();
 
     // Custom replies for greetings and thanks
     if (["hi", "hello", "hey"].includes(msg)) {
-      addMessage("Hello! How can I assist you today?", 'bot');
+      addMessage("Hello! How can I assist you today?", "bot");
       setIsTyping(false);
+      setShowOptions(false);
       return;
     }
-
     if (["thank you", "thanks", "ty", "thankyou"].includes(msg)) {
-      addMessage("You're welcome! Let me know if there's anything else I can help with.", 'bot');
+      addMessage("You're welcome! Let me know if there's anything else I can help with.", "bot");
       setIsTyping(false);
+      setShowOptions(false);
       return;
     }
 
-    try {
-      const systemPrompt = `You are Credora Assist, a professional and helpful AI assistant for Credora. Here's updated information about Credora also display the link of WhatsApp and LinkedIn whenever needed:
+    // Simulate network delay and response
+    setTimeout(() => {
+      let botResponse =
+        msg.includes("about credora") || msg.includes("what is credora")
+          ? `Credora is a dynamic and fast-growing internship platform dedicated to empowering students and early-career professionals. [See our LinkedIn page](https://www.linkedin.com/company/credora-space) | [Join WhatsApp group](https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb)`
+          : msg.includes("internship")
+          ? `We offer remote internships in Web, Mobile, Data Science, Content, HR, Marketing, Business, and Design. All programs are flexible and certificate-based. [Apply here](https://forms.gle/oQbxp8PJ1caBqth97)`
+          : msg.includes("certificate")
+          ? `Certificates are awarded upon successful completion. To verify, [click here](/verify-certificate).`
+          : msg.includes("team")
+          ? `Our founders: Sahil Dhawale (Founder), Nayan Raut (Co-Founder), Aniket Kumare (HR).`
+          : "I'm here to help with anything related to Credora's internships, certificates, or team!";
 
-- Credora is a dynamic and fast-growing internship platform dedicated to empowering students and early-career professionals.
-- Located in Wardha, Maharashtra.
-- Founders: Sahil Dhawale (Founder), Nayan Raut (Co-Founder), Aniket Kumare (HR).
-- Offers internships in domains like Web Development (Frontend, Backend, Full Stack), Mobile App Development (iOS, Android, Flutter), Data Science (Machine Learning, Artificial Intelligence, Deep Learning), Data Analysis (Visualization, Reporting, Excel, Python), Content Writing (Blogs, Technical Writing, SEO), Human Resources (Recruitment, Talent Acquisition), Social Media Marketing (Strategy, Content Creation, Growth Hacking), Business Development (Sales, Market Research, CRM Management), and Graphic Designing (Branding, UI/UX Design, Visual Storytelling).
-- Internships are remote, providing unmatched flexibility and real-world experience.
-- Certificates are awarded upon successful completion of the program.
-- Frequently Asked Questions (FAQs) include details about application processes, tasks, certificates, and more.
-- Contact: hr@credora.space / aniket@credora.space.
-- Welcome to Credora: Your Ultimate Internship Journey!
-- Location: Wardha, Maharashtra
-- Our Team:
-- Sahil Dhawale - Founder
-- Nayan Raut - Co-Founder
-- Aniket Kumare - HR
-- About Credora:
-- Credora is a dynamic and fast-growing internship platform dedicated to empowering students and early-career professionals. We offer practical, hands-on exposure across a wide variety of in-demand domains. Our internships are conducted entirely remotely, giving participants unmatched flexibility, real-world work experience, and the opportunity to build strong portfolios. Each intern not only sharpens their skills but also earns certificates that significantly boost their career profiles.
-- At Credora, we believe in nurturing talent, providing mentorship, and creating a vibrant, engaging learning environment.
-- Domains Offered at Credora:
-- Web Development (Frontend, Backend, Full Stack)
-- Mobile App Development (iOS, Android, Flutter)
-- Data Science (Machine Learning, Artificial Intelligence, Deep Learning)
-- Data Analysis (Visualization, Reporting, Excel, Python)
-- Content Writing (Blogs, Technical Writing, SEO)
-- Human Resources (Recruitment, Talent Acquisition)
-- Social Media Marketing (Strategy, Content Creation, Growth Hacking)
-- Business Development (Sales, Market Research, CRM Management)
-- Graphic Designing (Branding, UI/UX Design, Visual Storytelling)
-- Frequently Asked Questions (FAQs):
-- Q1: What is Credora?
-- Credora is your gateway to premium internship programs across multiple professional fields. We help you build a solid career foundation through live projects, continuous mentorship, industry-aligned tasks, and recognized certifications.
-- Q2: Are the internships paid?
-- Most of our internships are currently unpaid but packed with value! You gain mentorship, real-world exposure, portfolio-building projects, personalized feedback, certificates, and even opportunities to win bonuses through competitions.
-- Q3: How can I apply for an internship?
-- You can apply by filling out our Internship Interest Forms, available through LinkedIn posts, WhatsApp broadcasts, and other community groups. Selected candidates will receive an official offer letter via email.
-- Q4: I didn't receive my offer letter. What should I do?
-- First, check your spam or junk mail folders. If not found, it’s possible your application was submitted after the first batch of selections. Stay tuned for further opportunities!
-- Q5: What tasks will I have to complete?
-- Tasks are assigned weekly, simulating real-world work scenarios. They are designed to be moderately challenging, helping you upskill while building an impressive portfolio.
-- Q6: How are tasks submitted?
-- You’ll receive weekly submission links (Google Forms or portal links) through your domain-specific WhatsApp groups.
-- Q7: Will I receive a certificate?
-- Absolutely! Upon successful completion of the internship, fulfilling all submission and participation requirements, you’ll receive a verified digital certificate.
-- Q8: How can I connect with fellow interns?
-- All interns are grouped into domain-specific WhatsApp groups for updates, discussions, collaboration, and query resolution. Plus, live meets and virtual workshops are organized regularly!
-- Your Internship Journey at Credora:
-- 1. Complete the Internship Interest Form.
-- 2. Await shortlisting and receive your official offer letter.
-- 3. Join your domain-specific WhatsApp group.
-- 4. Receive and complete weekly tasks and assignments.
-- 5. Submit tasks by the specified deadlines.
-- 6. Participate in live meets, webinars, and Q&A sessions.
-- 7. Successfully complete the program and receive your certificate!
-- Important Reminders for Interns:
-- Check your email (including spam folders) regularly for updates.
-- Stay responsive and active in all communication channels.
-- Meet deadlines diligently to qualify for certifications.
-- Engage with your peers and mentors actively.
-- Follow Credora on LinkedIn for exclusive news, updates, and tips.
-- Special Engagement Activities:
-- LinkedIn Profile Update: Add "Credora Intern" to your LinkedIn Experience section.
-- Social Media Challenge: Post your offer letter, tag Credora, and get a chance to win Amazon vouchers worth ₹1000!
-- Hackathons & Contests: Join our exclusive hackathons and competitions to win exciting prizes and bonus certificates.
-- Leaderboards: Top performers get special recognition on our LinkedIn page and other bonus rewards!
-- Contact and Support:
-- Official Email: hr@credora.space / aniket@credora.space
-- LinkedIn: https://www.linkedin.com/company/credora-space
-- WhatsApp: https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb Invitation links are sent along with offer letters. Join early to stay informed!
-- Thank You for Choosing Credora!
-- We are excited to have you onboard. Get ready to explore, learn, innovate, and grow. Your career journey starts here, and we're honored to be part of it. Let's create success together—one project, one skill, one achievement at a time!
-- Welcome to the Credora Family!
+      // Make links clickable
+      botResponse = botResponse
+        .replace(
+          /https:\/\/chat\.whatsapp\.com\/[^\s)]+/g,
+          '<a href="https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb" target="_blank" rel="noopener noreferrer">Join WhatsApp group</a>'
+        )
+        .replace(
+          /https:\/\/www\.linkedin\.com\/company\/credora-space/g,
+          '<a href="https://www.linkedin.com/company/credora-space" target="_blank" rel="noopener noreferrer">See our LinkedIn page</a>'
+        )
+        .replace(
+          /\[Apply here\]\(([^)]+)\)/g,
+          '<a href="$1" target="_blank" rel="noopener noreferrer">Apply here</a>'
+        )
+        .replace(
+          /\[click here\]\(([^)]+)\)/g,
+          '<a href="$1" target="_blank" rel="noopener noreferrer">click here</a>'
+        );
 
-Interaction Guidelines:
-- Provide professional, concise, and relevant responses.
-- Avoid unnecessary information unless explicitly asked.
-- Use a warm and friendly tone while maintaining professionalism.
-- For WhatsApp and LinkedIn links, provide clickable text like "Join WhatsApp group" or "See our LinkedIn page" that redirects users to the respective links in a new tab.
-- Ensure responses are natural and human-like.`;
-
-      const response = await fetch('https://api.together.xyz/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.REACT_APP_TOGETHER_API_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userMessage }
-          ],
-          temperature: 0.7,
-          max_tokens: 500
-        })
-      });
-
-      const data = await response.json();
-      let botResponse = data.choices[0].message.content;
-
-      // Replace links with clickable text
-      botResponse = botResponse.replace(
-        'https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb',
-        '<a href="https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb" target="_blank" rel="noopener noreferrer">Join WhatsApp group</a>'
-      );
-      botResponse = botResponse.replace(
-        'https://www.linkedin.com/company/credora-space',
-        '<a href="https://www.linkedin.com/company/credora-space" target="_blank" rel="noopener noreferrer">See our LinkedIn page</a>'
-      );
-
-      addMessage(botResponse, 'bot');
-    } catch (error) {
-      addMessage('Sorry, I encountered an error. Please try again later.', 'bot');
-    }
-
-    setIsTyping(false);
-    setShowOptions(false);
+      addMessage(botResponse, "bot");
+      setIsTyping(false);
+      setShowOptions(false);
+    }, 1100);
   };
 
   const handleSend = async () => {
     if (!input.trim()) return;
-    addMessage(input, 'user');
-    setInput('');
+    addMessage(input, "user");
+    setInput("");
     await handleBotResponse(input);
   };
 
+  // Keyboard enter to send
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSend();
+  };
+
+  // Styles
   const styles = {
     container: {
-      position: 'fixed',
-      bottom: '20px',
-      right: '20px',
+      position: "fixed",
+      bottom: "28px",
+      right: "28px",
       zIndex: 1000,
     },
     chatIcon: {
-      backgroundColor: '#2563eb',
-      borderRadius: '50%',
-      width: '60px',
-      height: '60px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      cursor: 'pointer',
-      color: 'white',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+      background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+      borderRadius: "50%",
+      width: "70px",
+      height: "70px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+      color: "white",
+      boxShadow: "0 2px 16px rgba(99,102,241,0.18)",
+      fontSize: "2.1rem",
+      position: "relative",
+      transition: "box-shadow 0.13s, transform 0.18s"
     },
     chatWindow: {
-      position: 'absolute',
-      bottom: '80px',
-      right: '0',
-      width: '350px',
-      height: '500px',
-      backgroundColor: 'white',
-      borderRadius: '12px',
-      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column',
+      position: "absolute",
+      bottom: "90px",
+      right: 0,
+      width: "370px",
+      height: "520px",
+      background: colors.background,
+      borderRadius: "18px",
+      boxShadow: "0 4px 24px rgba(30,41,59,0.23)",
+      overflow: "hidden",
+      display: "flex",
+      flexDirection: "column",
+      border: `1.5px solid ${colors.glass}`,
+      animation: "fadeInUp 0.8s cubic-bezier(0.4,0,0.2,1)",
     },
     header: {
-      backgroundColor: '#2563eb',
-      padding: '16px',
-      color: 'white',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      background: `linear-gradient(120deg, ${colors.primary} 60%, ${colors.secondary} 100%)`,
+      padding: "18px",
+      color: "white",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      fontFamily: fonts.heading,
+      fontWeight: 700,
+      fontSize: "1.22rem",
+      letterSpacing: "0.01em"
     },
     messagesContainer: {
       flex: 1,
-      overflowY: 'auto',
-      padding: '16px',
-      scrollBehavior: 'smooth',
+      overflowY: "auto",
+      padding: "18px 15px 10px 15px",
+      scrollBehavior: "smooth",
+      background: colors.light,
     },
     message: {
-      marginBottom: '16px',
-      maxWidth: '80%',
-      padding: '12px',
-      borderRadius: '8px',
-      whiteSpace: 'pre-wrap',
+      marginBottom: "15px",
+      maxWidth: "80%",
+      padding: "11px 13px",
+      borderRadius: "8px",
+      whiteSpace: "pre-wrap",
+      fontSize: "1.02rem",
+      lineHeight: 1.5,
+      wordBreak: "break-word"
     },
     userMessage: {
-      backgroundColor: '#2563eb',
-      color: 'white',
-      marginLeft: 'auto',
+      background: colors.primary,
+      color: "white",
+      marginLeft: "auto",
+      borderBottomRightRadius: "2.5px",
+      boxShadow: "0 2px 8px rgba(99,102,241,0.12)"
     },
     botMessage: {
-      backgroundColor: '#f8fafc',
-      color: '#1e293b',
+      background: "#f8fafc",
+      color: "#1e293b",
+      marginRight: "auto",
+      borderBottomLeftRadius: "2.5px",
+      border: `1px solid ${colors.glass}`,
+      boxShadow: "0 2px 8px rgba(99,102,241,0.09)"
     },
     quickOptions: {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
-      gap: '8px',
-      padding: '16px',
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: "11px",
+      padding: "15px 16px 4px 16px",
+      background: "#fff",
+      borderTop: `1px solid ${colors.border}`
     },
     quickOption: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-      padding: '12px',
-      backgroundColor: '#f8fafc',
-      border: '1px solid #e2e8f0',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      fontSize: '14px',
-      transition: 'all 0.2s',
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+      padding: "13px",
+      background: `${colors.light}`,
+      border: `1px solid ${colors.border}`,
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontSize: "15px",
+      transition: "all 0.19s",
+      fontWeight: 500,
+      color: colors.dark,
+      boxShadow: "0 1px 3px rgba(99,102,241,0.05)",
+      userSelect: "none",
+      outline: "none",
     },
     inputContainer: {
-      padding: '16px',
-      borderTop: '1px solid #e2e8f0',
-      display: 'flex',
-      gap: '8px',
+      padding: "14px",
+      borderTop: `1.2px solid ${colors.border}`,
+      display: "flex",
+      gap: "8px",
+      background: "#fff"
     },
     input: {
       flex: 1,
-      padding: '12px',
-      borderRadius: '8px',
-      border: '1px solid #e2e8f0',
-      fontSize: '14px',
+      padding: "12px",
+      borderRadius: "8px",
+      border: `1px solid ${colors.border}`,
+      fontSize: "15px",
+      fontFamily: fonts.primary,
+      background: "#f8fafc",
+      outline: "none"
     },
     sendButton: {
-      backgroundColor: '#2563eb',
-      color: 'white',
-      border: 'none',
-      borderRadius: '8px',
-      padding: '12px 24px',
-      cursor: 'pointer',
+      background: colors.primary,
+      color: "white",
+      border: "none",
+      borderRadius: "8px",
+      padding: "12px 22px",
+      cursor: "pointer",
+      fontWeight: 600,
+      fontSize: "15px",
+      transition: "background 0.19s, transform 0.12s",
+      boxShadow: "0 1px 6px rgba(99,102,241,0.12)"
     },
+    feedbackRow: {
+      display: "flex",
+      alignItems: "center",
+      gap: 3,
+      marginTop: 4,
+      marginLeft: 2,
+    }
   };
 
   return (
     <div style={styles.container}>
       <motion.div
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.08, boxShadow: "0 4px 24px #6366f1aa" }}
+        whileTap={{ scale: 0.92 }}
         onClick={() => setIsOpen(true)}
         style={styles.chatIcon}
+        aria-label="Open chat"
       >
-        <FaRobot size={28} />
+        <FaRobot size={32} />
       </motion.div>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 25, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
+            exit={{ opacity: 0, y: 25, scale: 0.95 }}
+            transition={{ duration: 0.22 }}
             style={styles.chatWindow}
           >
             <div style={styles.header}>
-              <h3>Credora Assist</h3>
+              <span>Credora Assist</span>
               <FaTimes
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer", fontSize: "1.5rem" }}
                 onClick={() => setIsOpen(false)}
+                aria-label="Close chat"
               />
             </div>
             <div style={styles.messagesContainer}>
               {messages.map(message => (
-                <div
-                  key={message.id}
-                  style={{
-                    ...styles.message,
-                    ...(message.sender === 'user' ? styles.userMessage : styles.botMessage),
-                  }}
-                  dangerouslySetInnerHTML={{ __html: message.text }}
-                />
+                <div key={message.id}>
+                  <div
+                    style={{
+                      ...styles.message,
+                      ...(message.sender === "user"
+                        ? styles.userMessage
+                        : styles.botMessage)
+                    }}
+                    dangerouslySetInnerHTML={{ __html: message.text.replace(/\n/g, "<br/>") }}
+                  />
+                  {message.sender === "bot" && (
+                    <div style={styles.feedbackRow}>
+                      <FeedbackButton
+                        type="up"
+                        onClick={() => handleFeedback(message.id, true)}
+                        active={feedbackStates[message.id]}
+                        disabled={!!feedbackStates[message.id]}
+                      />
+                      <FeedbackButton
+                        type="down"
+                        onClick={() => handleFeedback(message.id, false)}
+                        active={feedbackStates[message.id]}
+                        disabled={!!feedbackStates[message.id]}
+                      />
+                    </div>
+                  )}
+                </div>
               ))}
               {isTyping && (
                 <div style={{ ...styles.message, ...styles.botMessage }}>
                   Typing...
                 </div>
               )}
+              <div ref={messagesEndRef} />
             </div>
             {showOptions && (
               <div style={styles.quickOptions}>
                 {quickOptions.map((option, index) => (
                   <div
                     key={index}
+                    tabIndex={0}
                     style={styles.quickOption}
                     onClick={() => handleQuickOption(option)}
+                    onKeyPress={e => e.key === "Enter" && handleQuickOption(option)}
                   >
                     {option.icon}
                     <span>{option.text}</span>
@@ -425,10 +885,11 @@ Interaction Guidelines:
               <input
                 type="text"
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder="Type your message..."
                 style={styles.input}
+                aria-label="Type your message"
               />
               <button onClick={handleSend} style={styles.sendButton}>
                 Send
