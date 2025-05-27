@@ -268,7 +268,7 @@ const LogoLink = styled(Link)`
 `;
 
 const LogoImg = styled.img`
-  height: 60px;
+  height:50px; 
   width: auto;
   @media (max-width: 600px) {
     height: 44px;

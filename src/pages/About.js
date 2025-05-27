@@ -649,24 +649,39 @@ const services = [
 ];
 
 const teamMembers = [
+ {
+  name: "Sahil Dhawale",
+  position: "Founder",
+  bio: "Full Stack Developer and entrepreneur passionate about building scalable tech solutions and nurturing future talent through innovation.",
+  avatar: "/images/sahil.jpg",
+},
+
+ {
+  name: "Nayan Raut",
+  position: "Co-Founder",
+  bio: "Co-founder of Credora, driving innovation in AI-powered hiring and enterprise tech solutions with a focus on scalable impact.",
+  avatar: ""
+},
   {
-    name: "Anika Patel",
-    position: "CEO & Founder",
-    bio: "Former HR executive with 20+ years in talent acquisition and development.",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-  },
-  {
-    name: "Rajesh Kumar",
-    position: "CTO",
-    bio: "Tech innovator specializing in AI-driven talent matching algorithms.",
-    avatar: "https://randomuser.me/api/portraits/men/67.jpg",
-  },
-  {
-    name: "Sarah Johnson",
-    position: "Head of Corporate Relations",
-    bio: "Expert in building strategic partnerships with Fortune 500 companies.",
-    avatar: "https://randomuser.me/api/portraits/women/65.jpg",
-  },
+  name: "Aniket Kumare",
+  position: "HR",
+  bio: "HR professional focused on talent acquisition, employee engagement, and building strong industry partnerships to drive team success.",
+  avatar: ""
+},
+{
+  name: "Devendra Ambalkar",
+  position: "SDE",
+  bio: "Skilled Software Developer with expertise in full-stack development, delivering robust and scalable web solutions with a focus on performance and user experience.",
+  avatar: ""
+},
+{
+  name: "Vaibhav Pawar",
+  position: "SDE",
+  bio: "Passionate Software Engineer focused on building efficient, user-centric applications using modern web technologies and clean architecture.",
+  avatar: ""
+}
+
+
 ];
 
 // MOTION VARIANTS

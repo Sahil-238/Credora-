@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 
-// Design System
+// Dark Theme Design System
 const colors = {
   primary: "#6366f1",
   secondary: "#8b5cf6",
   accent: "#f59e0b",
-  background: "#f8fafc",
-  text: "#1e293b",
-  lightText: "#64748b",
-  lightBackground: "#e2e8f0",
+  background: "#181D31",
+  card: "#232946",
+  text: "#f8fafc",
+  lightText: "#A2A9C4",
+  lightBackground: "#232946",
+  border: "#282F44",
   error: "#dc2626",
   success: "#22c55e",
 };
@@ -40,6 +42,7 @@ const Page = styled.div`
   min-height: 100vh;
   font-family: ${fonts.primary};
   color: ${colors.text};
+  background: ${colors.background};
 `;
 
 const HeroSection = styled.header`
@@ -47,7 +50,7 @@ const HeroSection = styled.header`
   padding: ${spacing.xlarge} ${spacing.medium};
   color: #fff;
   border-radius: 0 0 30px 30px;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.11);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.21);
   text-align: center;
 `;
 
@@ -56,7 +59,7 @@ const HeroTitle = styled.h1`
   font-family: ${fonts.heading};
   margin-bottom: ${spacing.medium};
   letter-spacing: -1px;
-  text-shadow: 0 2px 8px rgba(30,41,59,0.15);
+  text-shadow: 0 2px 8px rgba(30,41,59,0.25);
 `;
 
 const HeroSubtitle = styled.p`
@@ -75,6 +78,7 @@ const SectionTitle = styled.h2`
   font-family: ${fonts.heading};
   text-align: center;
   margin-bottom: ${spacing.large};
+  color: ${colors.text};
 `;
 
 const ContactGrid = styled.div`
@@ -87,9 +91,9 @@ const ContactGrid = styled.div`
 `;
 
 const InfoCard = styled.div`
-  background: #fff;
+  background: ${colors.card};
   border-radius: 18px;
-  box-shadow: 0 4px 22px rgba(99,102,241,0.07);
+  box-shadow: 0 4px 22px rgba(99,102,241,0.12);
   padding: 2.2rem 1.5rem;
   margin-bottom: ${spacing.large};
   display: flex;
@@ -97,13 +101,14 @@ const InfoCard = styled.div`
   gap: ${spacing.medium};
   justify-content: center;
   align-items: flex-start;
+  border: 1.5px solid ${colors.border};
 `;
 
 const InfoRow = styled.div`
   display: flex;
   align-items: center;
   gap: ${spacing.medium};
-  font-size: 1.08rem;
+  font-size: 1.09rem;
   color: ${colors.text};
   margin-bottom: ${spacing.small};
   svg {
@@ -116,6 +121,9 @@ const InfoRow = styled.div`
     font-weight: 500;
     word-break: break-all;
   }
+  span {
+    color: ${colors.text};
+  }
 `;
 
 const MapFrame = styled.iframe`
@@ -123,14 +131,17 @@ const MapFrame = styled.iframe`
   min-height: 220px;
   border: none;
   border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(99,102,241,0.09);
+  margin-top: ${spacing.medium};
+  box-shadow: 0 2px 8px rgba(99,102,241,0.13);
+  background: ${colors.card};
 `;
 
 const FormCard = styled.div`
-  background: #fff;
+  background: ${colors.card};
   border-radius: 18px;
-  box-shadow: 0 4px 22px rgba(99,102,241,0.07);
+  box-shadow: 0 4px 22px rgba(99,102,241,0.12);
   padding: 2.2rem 1.5rem;
+  border: 1.5px solid ${colors.border};
 `;
 
 const Form = styled.form`
@@ -141,27 +152,39 @@ const Form = styled.form`
 
 const Input = styled.input`
   padding: ${spacing.medium};
-  border: 1.4px solid ${colors.lightBackground};
+  border: 1.5px solid ${colors.border};
   border-radius: 8px;
   font-size: 1rem;
+  color: ${colors.text};
   background: ${colors.background};
+  transition: border-color 0.2s;
   &:focus {
     border-color: ${colors.primary};
     outline: none;
+  }
+  &::placeholder {
+    color: ${colors.lightText};
+    opacity: 1;
   }
 `;
 
 const Textarea = styled.textarea`
   padding: ${spacing.medium};
-  border: 1.4px solid ${colors.lightBackground};
+  border: 1.5px solid ${colors.border};
   border-radius: 8px;
   font-size: 1rem;
   min-height: 120px;
+  color: ${colors.text};
   background: ${colors.background};
   resize: vertical;
+  transition: border-color 0.2s;
   &:focus {
     border-color: ${colors.primary};
     outline: none;
+  }
+  &::placeholder {
+    color: ${colors.lightText};
+    opacity: 1;
   }
 `;
 
@@ -175,7 +198,7 @@ const Button = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: background 0.18s, transform 0.13s;
-  box-shadow: 0 2px 8px rgba(99,102,241,0.09);
+  box-shadow: 0 2px 8px rgba(99,102,241,0.13);
   &:hover {
     background: linear-gradient(110deg, ${colors.primary} 70%, ${colors.secondary} 100%);
     transform: translateY(-2px) scale(1.01);
