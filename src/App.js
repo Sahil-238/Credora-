@@ -11,6 +11,8 @@ import About from './pages/About';
 import InternshipDetail from './pages/InternshipDetail';
 import Footer from './components/Footer';
 import ChatBot from './components/ChatBot';
+import Contact from './pages/Contact';
+import Portfolio from './pages/Portfolio';
 
 function App() {
   return (
@@ -26,6 +28,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-certificate" element={<VerifyCertificate />} />
+        <Route path="/contact" element={<Contact />} />
+
+        <Route path="/portfolio" element={<Portfolio />} />
+
       </Routes>
       <Footer />
       <ChatBot />
