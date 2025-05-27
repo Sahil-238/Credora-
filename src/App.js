@@ -11,8 +11,22 @@ import About from './pages/About';
 import InternshipDetail from './pages/InternshipDetail';
 import Footer from './components/Footer';
 import ChatBot from './components/ChatBot';
+
 import Contact from './pages/Contact';
 import Portfolio from './pages/Portfolio';
+
+import Certificate from './pages/Certificate';
+import UploadCertificate from './pages/UploadCertificate';
+import { Navigate } from 'react-router-dom';
+
+function AdminRoute({ children }) {
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  if (!isAdmin) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
+
 
 function App() {
   return (
@@ -28,10 +42,17 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-certificate" element={<VerifyCertificate />} />
+
         <Route path="/contact" element={<Contact />} />
 
         <Route path="/portfolio" element={<Portfolio />} />
 
+
+        <Route path="/upload-certificate" element={
+          <AdminRoute>
+            <UploadCertificate />
+          </AdminRoute>
+        } />
       </Routes>
       <Footer />
       <ChatBot />

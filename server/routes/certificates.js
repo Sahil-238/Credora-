@@ -2,11 +2,43 @@
 const express = require('express');
 const router = express.Router();
 const Certificate = require('../models/Certificate');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
-// POST endpoint to add a new certificate
-router.post('/', async (req, res) => {
+// Set up multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = 'uploads/certificates';
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// POST endpoint to add a new certificate with file upload
+router.post('/', upload.single('certificateFile'), async (req, res) => {
   try {
-    const newCertificate = new Certificate(req.body);
+    const { studentName, internshipTitle } = req.body;
+    const certificateFile = req.file ? req.file.filename : null;
+
+    if (!studentName || !internshipTitle || !certificateFile) {
+      return res.status(400).json({ message: 'Missing required fields or file' });
+    }
+
+    const newCertificate = new Certificate({
+      studentName,
+      internshipTitle,
+      certificateFile
+    });
+
     const savedCertificate = await newCertificate.save();
     res.status(201).json(savedCertificate);
   } catch (error) {
