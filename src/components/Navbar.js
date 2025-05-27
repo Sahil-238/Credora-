@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 
 const colors = {
@@ -161,6 +162,13 @@ const Overlay = styled.div`
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const navigate = useNavigate();
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 900);
+  };
   const location = useLocation();
 
   // Check admin login flag
@@ -173,7 +181,7 @@ const Navbar = () => {
     setIsMenuOpen(false);
   }, [location]);
 
-<<<<<<< HEAD
+// <<<<<<< HEAD
   useEffect(() => {
     const handler = (e) => {
       if (e.key === "Escape") setIsMenuOpen(false);
@@ -185,14 +193,14 @@ const Navbar = () => {
   const handleMobileLinkClick = () => setIsMenuOpen(false);
 
   const path = location.pathname;
-=======
+// =======
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('isAdmin');
     setIsAuthenticated(false);
     navigate('/');
   };
->>>>>>> 6f1a5fdbe62db93586e1ed262ce73f61be5ac5a1
+// >>>>>>> 6f1a5fdbe62db93586e1ed262ce73f61be5ac5a1
 
   const handleUploadClick = () => {
     document.getElementById('uploadInputNavbar').click();
@@ -224,54 +232,7 @@ const Navbar = () => {
     }
   };
 
-  return (
-<<<<<<< HEAD
-    <Nav>
-      <NavContainer>
-        <LogoLink to="/">
-          <LogoImg src="/images/logo.png" alt="Credora Logo" />
-        </LogoLink>
-        <Hamburger
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          onClick={() => setIsMenuOpen((v) => !v)}
-        >
-          {isMenuOpen ? <FaTimes /> : <FaBars />}
-        </Hamburger>
-        <NavLinks open={isMenuOpen}>
-          {/* Show logo and close button in mobile menu */}
-          <MobileLogo src="/images/logo.png" alt="Credora Logo" />
-          <CloseButton onClick={() => setIsMenuOpen(false)}>
-            <FaTimes />
-          </CloseButton>
-          <NavItem>
-            <NavLink to="/" $active={path === "/"} onClick={handleMobileLinkClick}>
-              Home
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/about" $active={path === "/about"} onClick={handleMobileLinkClick}>
-              About
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/internships" $active={path === "/internships"} onClick={handleMobileLinkClick}>
-              Internships
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/verify-certificate" $active={path === "/verify-certificate"} onClick={handleMobileLinkClick}>
-              Verify
-            </NavLink>
-          </NavItem>
-        </NavLinks>
-      </NavContainer>
-      <Overlay open={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
-    </Nav>
-  );
-};
-
-export default Navbar;
-=======
+  return (  
     <nav style={navStyle}>
       <div style={navContainer}>
       <div style={logoStyle}>
@@ -358,15 +319,15 @@ const buttonStyle = {
 
 
 // Design System Constants
-const colors = {
-  primary: '#2563eb',
-  secondary: '#0d9488',
-  accent: '#f59e0b',
-  background: '#f8fafc',
-  text: '#1e293b',
-  lightText: '#64748b',
-  lightBackground: '#e2e8f0'
-};
+//  colors = {
+//   primary: '#2563eb',
+//   secondary: '#0d9488', 
+//   accent: '#f59e0b',
+//   background: '#f8fafc',
+//   text: '#1e293b',
+//   lightText: '#64748b',
+//   lightBackground: '#e2e8f0'
+// };
 const spacing = {
   small: '8px',
   medium: '16px',
@@ -537,4 +498,3 @@ const profileStyle = {
 };
 
 export default Navbar;
->>>>>>> 6f1a5fdbe62db93586e1ed262ce73f61be5ac5a1
