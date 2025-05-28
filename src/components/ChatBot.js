@@ -366,15 +366,15 @@ Response Guidelines:
 
   const getHeaderStyles = () => ({
     background: colors.gradient1,
-    padding: isMobile ? "12px 10px" : isMinimized ? "16px 12px" : "16px 12px",
+    padding: isMobile ? "16px 10px" : isMinimized ? "16px 12px" : "16px 12px",
     color: "white",
     display: "flex",
     alignItems: "center",
     fontFamily: fonts.heading,
     fontSize: isMobile ? (isVerySmall ? "0.9rem" : "1rem") : "1.1rem",
     fontWeight: "600",
-    minHeight: isMobile ? "30px" : "auto",
-    position: "relative" // Enables absolute positioning of button group
+    minHeight: isMobile ? "50px" : "auto",
+    position: "relative"
   });
 
   const getMessageStyles = (sender) => ({
