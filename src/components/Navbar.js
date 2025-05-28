@@ -83,8 +83,9 @@ const NavLinks = styled.ul`
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
-    right: ${({ $isOpen }) => ($isOpen ? "0" : "-100%")};
-    width: 70%;
+    left: ${({ $isOpen }) => ($isOpen ? "0" : "-100%")};
+    ${'' /* right: ${({ $isOpen }) => ($isOpen ? "0" : "100%")}; */}
+    width: 100%;
     height: 100vh;
     background: ${colors.navBg};
     flex-direction: column;

@@ -94,10 +94,11 @@ const ChatBot = () => {
   const [showOptions, setShowOptions] = useState(true);
   const [feedbackStates, setFeedbackStates] = useState({});
   const [isMinimized, setIsMinimized] = useState(false);
+  const [messageCount, setMessageCount] = useState(0);
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
-  // Enhanced responsive state management
+  // Responsive state management
   const [screenSize, setScreenSize] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 768,
     height: typeof window !== 'undefined' ? window.innerHeight : 600
@@ -154,6 +155,18 @@ const ChatBot = () => {
   const addMessage = useCallback((text, sender, id = Date.now()) => {
     const formattedText = sender === 'bot' ? formatBotResponse(text) : text;
     setMessages(prev => [...prev, { text: formattedText, sender, id }]);
+    
+    // Count bot messages and hide options after 2-3 messages
+    if (sender === 'bot') {
+      setMessageCount(prev => {
+        const newCount = prev + 1;
+        // Hide options after 2 bot responses
+        if (newCount >= 2) {
+          setShowOptions(false);
+        }
+        return newCount;
+      });
+    }
   }, []);
 
   const handleFeedback = async (messageId, isHelpful) => {
@@ -181,27 +194,110 @@ const ChatBot = () => {
 
   const handleBotResponse = async (userMessage) => {
     setIsTyping(true);
-    setShowOptions(false);
     const msg = userMessage.trim().toLowerCase();
 
-    setTimeout(() => {
-      let botResponse = 
-        msg.includes("about credora")
-          ? "Credora is a dynamic internship platform dedicated to empowering students and early-career professionals. [Visit LinkedIn](https://www.linkedin.com/company/credora-space) | [Join WhatsApp](https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb)"
-          : msg.includes("internship")
-          ? "We offer remote internships in Web Development, Data Science, Java, Python, and more! All programs are flexible and certificate-based. [Apply here](https://forms.gle/oQbxp8PJ1caBqth97)"
-          : msg.includes("certificate")
-          ? "We provide verified certificates upon successful completion of our internships. To verify a certificate, visit our certificate verification page."
-          : msg.includes("team")
-          ? "Our team includes Sahil Dhawale (Founder), Nayan Raut (Co-Founder), and Aniket Kumare (HR)."
-          : "I'm here to help with anything related to Credora's internships, certificates, or team!";
-
-      botResponse = botResponse
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #8b5cf6; text-decoration: none; font-weight: 500;">$1</a>');
-
-      addMessage(botResponse, "bot");
+    // Predefined responses for common Credora-related questions
+    if (msg.includes("founder")) {
+      addMessage("Credora was founded by Sahil Dhawale along with our dedicated team of Nayan Raut (Co-Founder) and Aniket Kumare (HR).", "bot");
       setIsTyping(false);
-    }, 1000);
+      return;
+    } else if (msg.includes("about credora")) {
+      addMessage(
+        "Credora is a dynamic internship platform dedicated to empowering students and early-career professionals. We offer remote internships with flexible schedules, hands-on exposure, and verified certificates. For more details, check out our <a href=\"https://www.linkedin.com/company/credora-space\" target=\"_blank\" rel=\"noopener noreferrer\">LinkedIn page</a> or <a href=\"https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb\" target=\"_blank\" rel=\"noopener noreferrer\">join our WhatsApp group</a>.",
+        "bot"
+      );
+      setIsTyping(false);
+      return;
+    } else if (msg.includes("internship")) {
+      addMessage(
+        "We offer remote internships in various domains such as Web Development, Data Science, Mobile App Development, Data Analysis, and more. Our programs provide real-world exposure along with mentorship and verified certificates upon completion.",
+        "bot"
+      );
+      setIsTyping(false);
+      return;
+    } else if (msg.includes("certificate")) {
+      addMessage("Yes, upon successful completion of our internship programs, you will receive a verified digital certificate.", "bot");
+      setIsTyping(false);
+      return;
+    } else if (msg.includes("team")) {
+      addMessage("Our team includes Sahil Dhawale (Founder), Nayan Raut (Co-Founder), and Aniket Kumare (HR).", "bot");
+      setIsTyping(false);
+      return;
+    } else if (msg.includes("contact")) {
+      addMessage(
+        "For any inquiries, you can reach us at hr@credora.space or aniket@credora.space. We're here to help!",
+        "bot"
+      );
+      setIsTyping(false);
+      return;
+    }
+    
+    // Fallback: Use the Together API for a conversational response
+    try {
+      const systemPrompt = `You are Credora Assist, a professional and helpful AI assistant for Credora.
+Key Information:
+- Founded by Sahil Dhawale (Founder), Nayan Raut (Co-Founder), and Aniket Kumare (HR)
+- Located in Wardha, Maharashtra
+- Offering remote internships in Web Development, Data Science, Mobile App Development, Data Analysis, and more
+- Contact: hr@credora.space or aniket@credora.space
+
+Important Links:
+- To visit our LinkedIn page, click here: Visit our LinkedIn page (https://www.linkedin.com/company/credora-space)
+- To join our WhatsApp group, click here: Join our WhatsApp community (https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb)
+
+Response Guidelines:
+- For greetings (hi, hello, hey, etc.), respond in 2-3 lines maximum
+- Keep all responses concise and friendly
+- When mentioning social media, use the format: "Visit our [platform] (link)"
+- Avoid HTML tags in responses
+- For general questions, limit responses to 4-5 lines maximum`;
+      
+      const response = await fetch('https://api.together.xyz/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.REACT_APP_TOGETHER_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage }
+          ],
+          temperature: 0.7,
+          max_tokens: 500
+        })
+      });
+      
+      const data = await response.json();
+      let botResponse = data.choices[0].message.content;
+      
+      // Convert markdown-style links to HTML anchor tags
+      botResponse = botResponse.replace(
+        /([^[]*)?\[(.*?)\]\((.*?)\)/g,
+        (_, prefix, text, url) => {
+          return `${prefix || ''}<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: #8b5cf6; text-decoration: underline;">${text}</a>`;
+        }
+      );
+
+      // Also handle plain URLs for LinkedIn and WhatsApp
+      botResponse = botResponse
+        .replace(
+          /(https:\/\/chat\.whatsapp\.com\/CSAG3Ev8PdE3yXMlqL14wb)/g,
+          '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #8b5cf6; text-decoration: underline;">Join WhatsApp group</a>'
+        )
+        .replace(
+          /(https:\/\/www\.linkedin\.com\/company\/credora-space)/g,
+          '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #8b5cf6; text-decoration: underline;">Visit LinkedIn page</a>'
+        );
+      
+      addMessage(botResponse, 'bot');
+    } catch (error) {
+      addMessage('Sorry, I encountered an error. Please try again later.', 'bot');
+      console.error(error);
+    }
+    
+    setIsTyping(false);
   };
 
   const handleSend = () => {
@@ -231,29 +327,32 @@ const ChatBot = () => {
     if (isMobile) {
       return {
         position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
+        bottom: '90px', // Positioned above the floating button
+        right: '20px',
+        width: '300px', // Small chat window for mobile
+        height: isMinimized ? '50px' : '400px',  // 50px when minimized, 400px when open
         background: colors.background,
-        borderRadius: 0,
-        boxShadow: "none",
+        borderRadius: isMinimized ? "25px" : "16px", // Rounded corners
+        boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
-        border: 'none',
-        zIndex: 9999
+        border: `1px solid ${colors.border}`,
+        backdropFilter: colors.glassBlur,
+        zIndex: 1000,
+        transition: 'all 0.3s ease'
       };
     }
     
+    // Existing desktop style
     return {
       position: 'fixed',
       bottom: '110px',
       right: '28px',
-      width: isMinimized ? '300px' : 'min(350px, calc(100vw - 56px))', // Increased minimized width
-      height: isMinimized ? '50px' : 'min(500px, calc(100vh - 140px))', // Slightly increased minimized height
+      width: isMinimized ? '300px' : 'min(350px, calc(100vw - 56px))',
+      height: isMinimized ? '50px' : 'min(500px, calc(100vh - 140px))',
       background: colors.background,
-      borderRadius: isMinimized ? "25px" : "16px", // Rounded corners for minimized state
+      borderRadius: isMinimized ? "25px" : "16px",
       boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
       overflow: "hidden",
       display: "flex",
@@ -267,18 +366,15 @@ const ChatBot = () => {
 
   const getHeaderStyles = () => ({
     background: colors.gradient1,
-    padding: isMobile ? "12px 16px" : isMinimized ? "14px 24px" : "14px 20px", // Added padding for minimized state
+    padding: isMobile ? "12px 16px" : isMinimized ? "14px 24px" : "14px 20px",
     color: "white",
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
     fontFamily: fonts.heading,
     fontSize: isMobile ? (isVerySmall ? "0.9rem" : "1rem") : "1.1rem",
     fontWeight: "600",
     minHeight: isMobile ? "50px" : "auto",
-    cursor: !isMobile ? 'pointer' : 'default',
-    textAlign: isMinimized ? 'center' : 'left', // Center text when minimized
-    flex: isMinimized ? 1 : 'none' // Take full height when minimized
+    position: "relative" // Enables absolute positioning of button group
   });
 
   const getMessageStyles = (sender) => ({
@@ -321,10 +417,7 @@ const ChatBot = () => {
     position: "relative",
   });
 
-  // Hide chatbot on mobile devices
-  if (isMobile) return null;
-
-  return (  
+  return (
     <div 
       ref={chatContainerRef}
       style={getFloatingButtonStyles()}
@@ -352,25 +445,60 @@ const ChatBot = () => {
         <FaRobot size={isMobile ? (isVerySmall ? 20 : 24) : 28} />
       </motion.div>
 
-      {/* Chat Modal */}
+      {/* Overlay covers the screen when chat is open */}
       <AnimatePresence>
         {isOpen && (
+          // This overlay catches all clicks outside the chat modal
           <motion.div
-            initial={isMobile ? { opacity: 0, scale: 0.95 } : { opacity: 0, y: 20, scale: 0.95 }}
-            animate={isMobile ? { opacity: 1, scale: 1 } : { opacity: 1, y: 0, scale: 1 }}
-            exit={isMobile ? { opacity: 0, scale: 0.95 } : { opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            style={getChatModalStyles()}
+            onClick={() => setIsOpen(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              background: 'rgba(0,0,0,0.4)',
+              zIndex: 900,
+            }}
           >
-            {/* Header */}
-            <div 
-              style={getHeaderStyles()} 
+            {/* Chat Modal */}
+            <motion.div
+              onClick={e => e.stopPropagation()} // Prevents closing when clicking inside chat modal
+              initial={isMobile ? { opacity: 0, scale: 0.95 } : { opacity: 0, y: 20, scale: 0.95 }}
+              animate={isMobile ? { opacity: 1, scale: 1 } : { opacity: 1, y: 0, scale: 1 }}
+              exit={isMobile ? { opacity: 0, scale: 0.95 } : { opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              style={getChatModalStyles()}
             >
-              <span style={{ flex: 1, textAlign: 'center' }}>
-                Credora Assistant
-              </span>
-              <HeaderButtons isMobile={isMobile}>
-                {isMobile ? (
+              {/* Header */}
+              <div style={getHeaderStyles()}>
+                <span style={{ flex: 1, textAlign: 'left', paddingLeft: '16px' }}>
+                  Credora Assistant
+                </span>
+                {/* Button container absolutely positioned at top-right */}
+                <div style={{
+                  position: 'absolute',
+                  right: '16px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  display: 'flex',
+                  gap: '8px'
+                }}>
+                  <HeaderButton
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsMinimized(!isMinimized);
+                    }}
+                    isMobile={isMobile}
+                    isVerySmall={isVerySmall}
+                  >
+                    {isMinimized ? <FaRobot /> : <FaTimes style={{ transform: 'rotate(45deg)' }} />}
+                  </HeaderButton>
                   <HeaderButton
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -381,168 +509,139 @@ const ChatBot = () => {
                     isMobile={isMobile}
                     isVerySmall={isVerySmall}
                   >
-                    <FaTimes size={24} />
+                    <FaTimes />
                   </HeaderButton>
-                ) : (
-                  <>
-                    <HeaderButton
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsMinimized(!isMinimized);
-                      }}
-                      isMobile={isMobile}
-                      isVerySmall={isVerySmall}
-                    >
-                      {isMinimized ? <FaRobot /> : <FaTimes style={{ transform: 'rotate(45deg)' }} />}
-                    </HeaderButton>
-                    {!isMinimized && (
-                      <HeaderButton
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setIsOpen(false);
-                        }}
-                        isMobile={isMobile}
-                        isVerySmall={isVerySmall}
-                      >
-                        <FaTimes />
-                      </HeaderButton>
-                    )}
-                  </>
-                )}
-              </HeaderButtons>
-            </div>
-
-            {/* Messages Area */}
-            <div style={{
-              flex: 1,
-              overflowY: "auto",
-              padding: isMobile ? "16px 12px" : "20px 16px",
-              background: colors.background,
-            }}>
-              {messages.map(message => (
-                <div key={message.id}>
-                  <div
-                    style={getMessageStyles(message.sender)}
-                    dangerouslySetInnerHTML={{ __html: message.text }}
-                  />
-                  {message.sender === "bot" && (
-                    <div style={{ 
-                      display: "flex", 
-                      gap: "4px", 
-                      marginTop: "4px", 
-                      marginLeft: "4px",
-                      marginBottom: "8px"
-                    }}>
-                      <FeedbackButton
-                        type="up"
-                        onClick={() => handleFeedback(message.id, true)}
-                        active={feedbackStates[message.id]}
-                        disabled={!!feedbackStates[message.id]}
-                      />
-                      <FeedbackButton
-                        type="down"
-                        onClick={() => handleFeedback(message.id, false)}
-                        active={feedbackStates[message.id]}
-                        disabled={!!feedbackStates[message.id]}
-                      />
-                    </div>
-                  )}
                 </div>
-              ))}
-              
-              {/* Typing Indicator */}
-              {isTyping && (
-                <div style={{
-                  ...getMessageStyles("bot"),
-                  marginRight: "auto"
-                }}>
-                  <motion.div
-                    animate={{ opacity: [0.4, 1, 0.4] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    Typing...
-                  </motion.div>
+              </div>
+
+              {/* Messages Area */}
+              <div style={{
+                flex: 1,
+                overflowY: "auto",
+                padding: isMobile ? "16px 12px" : "20px 16px",
+                background: colors.background,
+              }}>
+                {messages.map(message => (
+                  <div key={message.id}>
+                    <div
+                      style={getMessageStyles(message.sender)}
+                      dangerouslySetInnerHTML={{ __html: message.text }}
+                    />
+                    {message.sender === "bot" && (
+                      <div style={{ 
+                        display: "flex", 
+                        gap: "4px", 
+                        marginTop: "4px", 
+                        marginLeft: "4px",
+                        marginBottom: "8px"
+                      }}>
+                        <FeedbackButton
+                          type="up"
+                          onClick={() => handleFeedback(message.id, true)}
+                          active={feedbackStates[message.id]}
+                          disabled={!!feedbackStates[message.id]}
+                        />
+                        <FeedbackButton
+                          type="down"
+                          onClick={() => handleFeedback(message.id, false)}
+                          active={feedbackStates[message.id]}
+                          disabled={!!feedbackStates[message.id]}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+                
+                {/* Typing Indicator */}
+                {isTyping && (
+                  <div style={{
+                    ...getMessageStyles("bot"),
+                    marginRight: "auto"
+                  }}>
+                    <motion.div
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      Typing...
+                    </motion.div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Quick Options */}
+              {showOptions && (
+                <div style={getQuickOptionsStyles()}>
+                  {quickOptions.map((option, index) => (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: isMobile ? "6px" : "8px",
+                        padding: isMobile ? "10px" : "12px",
+                        background: colors.dark,
+                        border: `1px solid ${colors.border}`,
+                        borderRadius: isMobile ? "10px" : "12px",
+                        cursor: "pointer",
+                        color: colors.text,
+                        fontSize: isMobile ? (isVerySmall ? "0.8rem" : "0.85rem") : "0.9rem",
+                        transition: "all 0.2s",
+                      }}
+                      onClick={() => handleQuickOption(option)}
+                    >
+                      <span style={{ fontSize: isMobile ? "0.9rem" : "1rem" }}>{option.icon}</span>
+                      <span>{option.text}</span>
+                    </motion.div>
+                  ))}
                 </div>
               )}
-              <div ref={messagesEndRef} />
-            </div>
 
-            {/* Quick Options */}
-            {showOptions && (
-              <div style={getQuickOptionsStyles()}>
-                {quickOptions.map((option, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: isMobile ? "6px" : "8px",
-                      padding: isMobile ? "10px" : "12px",
-                      background: colors.dark,
-                      border: `1px solid ${colors.border}`,
-                      borderRadius: isMobile ? "10px" : "12px",
-                      cursor: "pointer",
-                      color: colors.text,
-                      fontSize: isMobile ? (isVerySmall ? "0.8rem" : "0.85rem") : "0.9rem",
-                      transition: "all 0.2s",
-                    }}
-                    onClick={() => handleQuickOption(option)}
-                  >
-                    <span style={{ fontSize: isMobile ? "0.9rem" : "1rem" }}>{option.icon}</span>
-                    <span>{option.text}</span>
-                  </motion.div>
-                ))}
+              {/* Input Area */}
+              <div style={getInputContainerStyles()}>
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Type your message..."
+                  style={{
+                    flex: 1,
+                    padding: isMobile ? "12px" : "14px",
+                    borderRadius: isMobile ? "10px" : "12px",
+                    border: `1px solid ${colors.border}`,
+                    background: colors.dark,
+                    color: colors.text,
+                    fontSize: isMobile ? (isVerySmall ? "0.85rem" : "0.9rem") : "0.95rem",
+                    outline: "none",
+                    fontFamily: fonts.primary,
+                    transition: "border-color 0.2s",
+                  }}
+                />
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleSend}
+                  style={{
+                    background: colors.primary,
+                    color: "white",
+                    border: "none",
+                    borderRadius: isMobile ? "10px" : "12px",
+                    width: isMobile ? "44px" : "50px",
+                    height: isMobile ? "44px" : "50px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    transition: "transform 0.2s",
+                  }}
+                >
+                  <FaPaperPlane size={isMobile ? (isVerySmall ? 14 : 16) : 18} />
+                </motion.button>
               </div>
-            )}
-
-            {/* Input Area */}
-            <div style={getInputContainerStyles()}>
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Type your message..."
-                style={{
-                  flex: 1,
-                  padding: isMobile ? "12px" : "14px",
-                  borderRadius: isMobile ? "10px" : "12px",
-                  border: `1px solid ${colors.border}`,
-                  background: colors.dark,
-                  color: colors.text,
-                  fontSize: isMobile ? (isVerySmall ? "0.85rem" : "0.9rem") : "0.95rem",
-                  outline: "none",
-                  fontFamily: fonts.primary,
-                  transition: "border-color 0.2s",
-                }}
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleSend}
-                style={{
-                  background: colors.primary,
-                  color: "white",
-                  border: "none",
-                  borderRadius: isMobile ? "10px" : "12px",
-                  width: isMobile ? "44px" : "50px",
-                  height: isMobile ? "44px" : "50px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  transition: "transform 0.2s",
-                }}
-              >
-                <FaPaperPlane size={isMobile ? (isVerySmall ? 14 : 16) : 18} />
-              </motion.button>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
