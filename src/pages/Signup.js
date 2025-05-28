@@ -3,6 +3,16 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaSpinner, FaSignInAlt } from 'react-icons/fa';
+import styled, { createGlobalStyle } from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  body, html {
+    margin: 0;
+    padding: 0;
+    background: #000000;
+    min-height: 100vh;
+  }
+`;
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -27,107 +37,142 @@ const Signup = () => {
   };
 
   return (
-    <div style={pageStyle}>
-      {/* Hero Section */}
-      <header style={heroSection}>
-        <div style={heroContent}>
-          <h1 style={heroTitle}>Start Your Journey with Credora</h1>
-          <p style={heroSubtitle}>Create your account to access exclusive opportunities</p>
-        </div>
-      </header>
+    <>
+      <GlobalStyle />
+      <div style={{
+        background: colors.background,
+        minHeight: '100vh',
+        color: colors.text,
+        width: '100%',
+        position: 'relative',
+        zIndex: 1
+      }}>
+        <header style={{
+          background: colors.gradient1,
+          padding: `${spacing.xlarge} ${spacing.medium}`,
+          borderRadius: '0 0 30px 30px',
+          textAlign: 'center'
+        }}>
+          <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', marginBottom: spacing.medium }}>
+            Start Your Journey with Credora
+          </h1>
+          <p style={{ fontSize: 'clamp(1rem, 3vw, 1.2rem)', opacity: 0.9 }}>
+            Create your account to access exclusive opportunities
+          </p>
+        </header>
 
-      {/* Signup Form */}
-      <section style={sectionStyle}>
-        <div style={formContainer}>
-          <form onSubmit={handleSignup} style={loginForm}>
-            <div style={inputGroup}>
-              <FaUser style={inputIcon} />
-              <input
-                type="text"
-                placeholder="Full Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                style={inputStyle}
-              />
-            </div>
+        <SignupSection>
+          <FormWrapper>
+            <StyledForm onSubmit={handleSignup}>
+              <InputContainer>
+                <IconWrapper>
+                  <FaUser />
+                </IconWrapper>
+                <StyledInput
+                  type="text"
+                  placeholder="Full Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </InputContainer>
 
-            <div style={inputGroup}>
-              <FaEnvelope style={inputIcon} />
-              <input
-                type="email"
-                placeholder="Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                style={inputStyle}
-              />
-            </div>
+              <InputContainer>
+                <IconWrapper>
+                  <FaEnvelope />
+                </IconWrapper>
+                <StyledInput
+                  type="email"
+                  placeholder="Email Address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </InputContainer>
 
-            <div style={inputGroup}>
-              <FaLock style={inputIcon} />
-              <input
-                type="password"
-                placeholder="Create Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                style={inputStyle}
-              />
-            </div>
+              <InputContainer>
+                <IconWrapper>
+                  <FaLock />
+                </IconWrapper>
+                <StyledInput
+                  type="password"
+                  placeholder="Create Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </InputContainer>
 
-            <button 
-              type="submit" 
-              style={primaryButton}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <FaSpinner style={spinnerStyle} />
-              ) : (
-                <>
-                  <FaSignInAlt style={buttonIcon} />
-                  Create Account
-                </>
+              <StyledButton type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <FaSpinner style={{
+                    animation: 'spin 1s linear infinite'
+                  }} />
+                ) : (
+                  <>
+                    <FaSignInAlt size={18} />
+                    Create Account
+                  </>
+                )}
+              </StyledButton>
+
+              {message && (
+                <p style={{
+                  color: message.includes('failed') ? colors.error : colors.success,
+                  textAlign: 'center',
+                  marginTop: spacing.small
+                }}>
+                  {message}
+                </p>
               )}
-            </button>
 
-            {message && (
-              <p style={message.includes('failed') ? errorStyle : successStyle}>
-                {message}
+              <p style={{
+                textAlign: 'center',
+                color: colors.lightText,
+                marginTop: spacing.medium
+              }}>
+                Already have an account?{' '}
+                <a 
+                  href="/login"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/login');
+                  }}
+                  style={{
+                    color: colors.secondary,
+                    fontWeight: '600',
+                    textDecoration: 'none'
+                  }}
+                >
+                  Login here
+                </a>
               </p>
-            )}
-
-            <p style={loginText}>
-              Already have an account?{' '}
-              <a 
-                href="/login" 
-                style={loginLink}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/login');
-                }}
-              >
-                Login here
-              </a>
-            </p>
-          </form>
-        </div>
-      </section>
-    </div>
+            </StyledForm>
+          </FormWrapper>
+        </SignupSection>
+      </div>
+    </>
   );
 };
 
-// Reuse design system from previous pages
+// Update the colors constant
 const colors = {
-  primary: '#2563eb',
-  secondary: '#0d9488',
+  primary: '#6366f1',
+  secondary: '#8b5cf6',
   accent: '#f59e0b',
-  background: '#f8fafc',
-  text: '#1e293b',
-  lightText: '#64748b',
-  lightBackground: '#e2e8f0',
-  error: '#dc2626',
-  success: '#0d9488'
+  background: '#000000', // Changed from #0f172a to pure black
+  dark: '#111111',
+  text: '#e2e8f0',
+  lightText: '#94a3b8',
+  lightBackground: '#1e293b',
+  error: '#ef4444',
+  success: '#10b981',
+  glassBg: 'rgba(255,255,255,0.08)',
+  glassBlur: 'blur(20px)',
+  gradient1: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  gradient2: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+  inputBorder: 'rgba(255,255,255,0.1)',
+  inputFocus: 'rgba(99,102,241,0.5)'
 };
 
 const spacing = {
@@ -149,121 +194,146 @@ const pageStyle = {
   lineHeight: 1.6
 };
 
-const heroSection = {
-  backgroundColor: colors.primary,
-  padding: `${spacing.xlarge} ${spacing.medium}`,
-  color: 'white',
-  borderRadius: '0 0 30px 30px',
-  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-};
+const SignupSection = styled.section`
+  padding: ${spacing.xlarge} ${spacing.medium};
+  max-width: 600px;
+  margin: 0 auto;
 
-const heroContent = {
-  maxWidth: '1200px',
-  margin: '0 auto',
-  textAlign: 'center'
-};
+  @media (max-width: 768px) {
+    padding: ${spacing.large} ${spacing.medium};
+    margin-top: 30px;
+  }
 
-const heroTitle = {
-  fontSize: '2.5rem',
-  fontFamily: fonts.heading,
-  marginBottom: spacing.medium
-};
+  @media (max-width: 480px) {
+    padding: ${spacing.medium} ${spacing.small};
+    margin-top: 20px;
+  }
+`;
 
-const heroSubtitle = {
-  fontSize: '1.2rem',
-  marginBottom: spacing.xlarge,
-  opacity: 0.9
-};
+const FormWrapper = styled.div`
+  background: ${colors.dark};
+  backdrop-filter: ${colors.glassBlur};
+  padding: ${spacing.xlarge};
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border: 1px solid ${colors.inputBorder};
+  ${'' /* width: 100%; */}
+  max-width: 440px;
+  margin: 0 auto;
 
-const sectionStyle = {
-  padding: `${spacing.xlarge} ${spacing.medium}`,
-  maxWidth: '600px',
-  margin: '0 auto'
-};
+  @media (max-width: 768px) {
+    padding: ${spacing.large};
+    border-radius: 12px;
+  }
 
-// Form Styles
-const formContainer = {
-  backgroundColor: 'white',
-  padding: spacing.xlarge,
-  borderRadius: '12px',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-};
+  @media (max-width: 480px) {
+    padding: ${spacing.medium};
+    border-radius: 8px;
+  }
+`;
 
-const loginForm = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: spacing.large
-};
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${spacing.medium};
 
-const inputGroup = {
-  position: 'relative'
-};
+  @media (max-width: 768px) {
+    gap: ${spacing.small};
+  }
+`;
 
-const inputIcon = {
-  position: 'absolute',
-  left: spacing.medium,
-  top: '50%',
-  transform: 'translateY(-50%)',
-  color: colors.lightText,
-  fontSize: '1.2rem'
-};
+const InputContainer = styled.div`
+  position: relative;
+  width: 100%;
+  margin-bottom: ${spacing.medium};
 
-const inputStyle = {
-  width: '100%',
-  padding: `${spacing.medium} ${spacing.medium} ${spacing.medium} ${spacing.xlarge}`,
-  border: `1px solid ${colors.lightBackground}`,
-  borderRadius: '8px',
-  fontSize: '1rem',
-  transition: 'border-color 0.2s'
-};
+  @media (max-width: 768px) {
+    margin-bottom: ${spacing.small};
+  }
+`;
 
-const primaryButton = {
-  padding: spacing.medium,
-  backgroundColor: colors.secondary,
-  color: 'white',
-  border: 'none',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: spacing.small,
-  fontSize: '1rem',
-  fontWeight: '600',
-  transition: 'all 0.2s'
-};
+const IconWrapper = styled.div`
+  position: absolute;
+  left: ${spacing.medium};
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${colors.lightText};
+  font-size: 1.2rem;
+  pointer-events: none;
+  z-index: 1;
 
-const buttonIcon = {
-  fontSize: '1.2rem'
-};
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    left: 12px;
+  }
 
-const spinnerStyle = {
-  animation: 'spin 1s linear infinite',
-  fontSize: '1.2rem'
-};
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    left: 10px;
+  }
+`;
 
-const errorStyle = {
-  color: colors.error,
-  textAlign: 'center',
-  marginTop: spacing.small
-};
+const StyledInput = styled.input`
+  width: 100%;
+  padding: ${spacing.medium} ${spacing.medium} ${spacing.medium} ${spacing.xlarge};
+  border: 1px solid ${colors.inputBorder};
+  border-radius: 12px;
+  font-size: 1rem;
+  background-color: ${colors.dark};
+  color: ${colors.text};
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 
-const successStyle = {
-  color: colors.success,
-  textAlign: 'center',
-  marginTop: spacing.small
-};
+  &:focus {
+    border-color: ${colors.inputFocus};
+    outline: none;
+    box-shadow: 0 0 0 2px ${colors.primary}25;
+  }
 
-const loginText = {
-  textAlign: 'center',
-  color: colors.lightText,
-  marginTop: spacing.medium
-};
+  @media (max-width: 768px) {
+    padding: 12px 12px 12px 40px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+`;
 
-const loginLink = {
-  color: colors.primary,
-  fontWeight: '600',
-  textDecoration: 'none'
-};
+const StyledButton = styled.button`
+  width: 100%;
+  padding: ${spacing.medium};
+  background: ${colors.gradient1};
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${spacing.small};
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
 
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(99,102,241,0.25);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 14px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    
+    &:hover:not(:disabled) {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+`;
+
+// Reuse design system from previous pages
 export default Signup;

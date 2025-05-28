@@ -404,6 +404,18 @@ const StatsSection = styled.div`
   max-width: 1000px;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+    margin: 3rem auto;
+    border-radius: 24px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 2rem 1rem;
+    margin: 2rem auto;
+    border-radius: 20px;
+  }
 `;
 
 const StatsGrid = styled.div`
@@ -411,6 +423,16 @@ const StatsGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
   text-align: center;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 `;
 
 const StatCard = styled.div`
@@ -419,18 +441,52 @@ const StatCard = styled.div`
   border-radius: 20px;
   padding: 2rem;
   border: 1px solid rgba(255,255,255,0.2);
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
 `;
 
 const StatNumber = styled.div`
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
   color: #fbbf24;
   margin-bottom: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
 `;
 
 const StatLabel = styled.div`
   font-size: 1rem;
   opacity: 0.9;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+`;
+
+const StatIcon = styled.div`
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #fbbf24;
+
+  @media (max-width: 768px) {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 // PROCESS
@@ -828,9 +884,7 @@ const Home = () => {
               <StatsGrid>
                 {stats.map((stat, i) => (
                   <StatCard key={i}>
-                    <div style={{ fontSize: '2rem', marginBottom: '1rem', color: '#fbbf24' }}>
-                      {stat.icon}
-                    </div>
+                    <StatIcon>{stat.icon}</StatIcon>
                     <StatNumber>{stat.value}</StatNumber>
                     <StatLabel>{stat.label}</StatLabel>
                   </StatCard>

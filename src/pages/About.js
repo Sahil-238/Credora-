@@ -137,7 +137,7 @@ const SectionTitle = styled(motion.h2)`
   font-weight: 700;
   text-align: center;
   margin-bottom: 4rem;
-  background: ${colors.gradientText};
+  background: white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -250,7 +250,7 @@ const ServiceIcon = styled.div`
 `;
 
 const InternshipSection = styled.section`
-  background: ${colors.gradient3};
+  background: ${colors.glassBg  };
   border-radius: 32px;
   padding: 5rem 2rem;
   margin: 5rem auto 3rem auto;

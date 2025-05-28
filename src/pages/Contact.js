@@ -9,7 +9,7 @@ const colors = {
   accent: "#f59e0b",
   background: "#181D31",
   card: "#232946",
-  text: "#f8fafc",
+  text: "#ffffff",
   lightText: "#A2A9C4",
   lightBackground: "#232946",
   border: "#282F44",
@@ -112,11 +112,11 @@ const InfoRow = styled.div`
   color: ${colors.text};
   margin-bottom: ${spacing.small};
   svg {
-    color: ${colors.primary};
+    color: ${colors.primary}; 
     font-size: 1.5rem;
   }
   a {
-    color: ${colors.primary};
+    color: ${colors.text};
     text-decoration: none;
     font-weight: 500;
     word-break: break-all;

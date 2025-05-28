@@ -366,14 +366,14 @@ Response Guidelines:
 
   const getHeaderStyles = () => ({
     background: colors.gradient1,
-    padding: isMobile ? "12px 16px" : isMinimized ? "14px 24px" : "14px 20px",
+    padding: isMobile ? "12px 10px" : isMinimized ? "16px 12px" : "16px 12px",
     color: "white",
     display: "flex",
     alignItems: "center",
     fontFamily: fonts.heading,
     fontSize: isMobile ? (isVerySmall ? "0.9rem" : "1rem") : "1.1rem",
     fontWeight: "600",
-    minHeight: isMobile ? "50px" : "auto",
+    minHeight: isMobile ? "30px" : "auto",
     position: "relative" // Enables absolute positioning of button group
   });
 

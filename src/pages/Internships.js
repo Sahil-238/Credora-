@@ -139,9 +139,22 @@ const StyledImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.6);
+  filter: brightness(0.6) blur(6px); // Added blur effect
+  ${'' /* background: ${colors.gradient1}; */}
   position: absolute;
-  top: 0; left: 0; z-index: 0;
+  opacity: 0.6;
+  top: 0; 
+  left: 0; 
+  z-index: 0;
+  transform: scale(1.1); // Prevents blur edges from showing
+
+  @media (max-width: 768px) {
+    filter: brightness(0.5) blur(6px); // Slightly less blur on mobile
+  }
+
+  @media (max-width: 480px) {
+    filter: brightness(0.4) blur(4px); // Even less blur on smaller devices
+  }
 `;
 
 // Section and container
@@ -157,7 +170,7 @@ const SectionTitle = styled.h2`
   font-family: 'Poppins', 'Inter', sans-serif;
   text-align: center;
   margin-bottom: 3.2rem;
-  background: ${colors.gradient1};
+  background: white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

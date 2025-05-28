@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaSpinner, FaSignInAlt } from 'react-icons/fa';
+import styled, { createGlobalStyle } from 'styled-components';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -42,95 +43,126 @@ const Login = () => {
   };
 
   return (
-    <div style={pageStyle}>
-      {/* Hero Section */}
-      <header style={heroSection}>
-        <div style={heroContent}>
-          <h1 style={heroTitle}>Welcome Back to Credora</h1>
-          <p style={heroSubtitle}>Unlock your professional potential</p>
-        </div>
-      </header>
+    <>
+      <GlobalStyle />
+      <div style={{
+        ...pageStyle,
+        position: 'relative',
+        width: '100%',
+        minHeight: '100vh',
+        background: colors.background
+      }}>
+        {/* Hero Section */}
+        <header style={heroSection}>
+          <div style={heroContent}>
+            <h1 style={heroTitle}>Welcome Back to Credora</h1>
+            <p style={heroSubtitle}>Unlock your professional potential</p>
+          </div>
+        </header>
 
-      {/* Login Form */}
-      <section style={sectionStyle}>
-        <div style={formContainer}>
-          <form onSubmit={handleLogin} style={loginForm}>
-            <div style={inputGroup}>
-              <FaEnvelope style={inputIcon} />
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                style={inputStyle}
-              />
-            </div>
+        {/* Login Form */}
+        <LoginSection>
+          <FormWrapper>
+            <StyledForm onSubmit={handleLogin}>
+              <InputContainer>
+                <IconWrapper>
+                  <FaEnvelope />
+                </IconWrapper>
+                <StyledInput
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </InputContainer>
 
-            <div style={inputGroup}>
-              <FaLock style={inputIcon} />
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                style={inputStyle}
-              />
-            </div>
+              <InputContainer>
+                <IconWrapper>
+                  <FaLock />
+                </IconWrapper>
+                <StyledInput
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </InputContainer>
 
-            <button 
-              type="submit" 
-              style={primaryButton}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <FaSpinner style={spinnerStyle} />
-              ) : (
-                <>
-                  <FaSignInAlt style={buttonIcon} />
-                  Login
-                </>
+              <StyledButton type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <FaSpinner style={spinnerStyle} />
+                ) : (
+                  <>
+                    <FaSignInAlt size={18} />
+                    Login
+                  </>
+                )}
+              </StyledButton>
+
+              {message && (
+                <p style={message.includes('failed') ? errorStyle : successStyle}>
+                  {message}
+                </p>
               )}
-            </button>
 
-            {message && (
-              <p style={message.includes('failed') ? errorStyle : successStyle}>
-                {message}
+              <p style={signupText}>
+                Don't have an account?{' '}
+                <a 
+                  href="/signup" 
+                  style={signupLink}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/signup');
+                  }}
+                >
+                  Create account
+                </a>
               </p>
-            )}
-
-            <p style={signupText}>
-              Don't have an account?{' '}
-              <a 
-                href="/signup" 
-                style={signupLink}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate('/signup');
-                }}
-              >
-                Create account
-              </a>
-            </p>
-          </form>
-        </div>
-      </section>
-    </div>
+            </StyledForm>
+          </FormWrapper>
+        </LoginSection>
+      </div>
+    </>
   );
 };
 
+// Global Styles
+const GlobalStyle = createGlobalStyle`
+  body, html {
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  #root {
+    background-color: #000000;
+    min-height: 100vh;
+    width: 100%;
+  }
+`;
+
 // Design System Constants
 const colors = {
-  primary: '#2563eb',
-  secondary: '#0d9488',
-  accent: '#f59e0b',
-  background: '#f8fafc',
-  text: '#1e293b',
-  lightText: '#64748b',
-  lightBackground: '#e2e8f0',
-  error: '#dc2626',
-  success: '#0d9488'
+  primary: '#6366f1', // Indigo
+  secondary: '#8b5cf6', // Purple
+  accent: '#f59e0b',   // Amber
+  background: '#000000', // Changed from #0f172a to pure black
+  dark: '#111111', // Slightly lighter than black for input fields
+  text: '#e2e8f0',     // Light gray
+  lightText: '#94a3b8', // Slate
+  lightBackground: '#1e293b', // Darker slate
+  error: '#ef4444',     // Red
+  success: '#10b981',   // Green
+  glassBg: 'rgba(255,255,255,0.08)',
+  glassBlur: 'blur(20px)',
+  gradient1: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  gradient2: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+  inputBorder: 'rgba(255,255,255,0.1)', // Subtle border for inputs
+  inputFocus: 'rgba(99,102,241,0.5)' // Indigo with opacity for focus
 };
 
 const spacing = {
@@ -149,15 +181,17 @@ const fonts = {
 const pageStyle = {
   fontFamily: fonts.primary,
   color: colors.text,
-  lineHeight: 1.6
+  lineHeight: 1.6,
+  backgroundColor: colors.background,
+  minHeight: '100vh'
 };
 
 const heroSection = {
-  backgroundColor: colors.primary,
+  background: colors.gradient1,
   padding: `${spacing.xlarge} ${spacing.medium}`,
   color: 'white',
   borderRadius: '0 0 30px 30px',
-  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+  boxShadow: '0 4px 32px rgba(99,102,241,0.2)'
 };
 
 const heroContent = {
@@ -178,54 +212,111 @@ const heroSubtitle = {
   opacity: 0.9
 };
 
-const sectionStyle = {
-  padding: `${spacing.xlarge} ${spacing.medium}`,
-  maxWidth: '600px',
-  margin: '0 auto'
-};
+const LoginSection = styled.section`
+  padding: ${spacing.xlarge} ${spacing.medium};
+  max-width: 600px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: ${spacing.large} ${spacing.medium};
+    margin-top: 30px;
+  }
+
+  @media (max-width: 480px) {
+    padding: ${spacing.medium} ${spacing.small};
+    margin-top: 10px;
+  }
+`;
+
+const FormWrapper = styled.div`
+  background: ${colors.dark};
+  backdrop-filter: ${colors.glassBlur};
+  padding: ${spacing.xlarge};
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border: 1px solid ${colors.inputBorder};
+  ${'' /* width: 100%; */}
+  max-width: 440px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: ${spacing.large};
+    border-radius: 12px;
+  }
+
+  @media (max-width: 480px) {
+    padding: ${spacing.medium};
+    border-radius: 8px;
+  }
+`;
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${spacing.medium};
+
+  @media (max-width: 768px) {
+    gap: ${spacing.small};
+  }
+`;
+
+const InputContainer = styled.div`
+  position: relative;
+  width: 100%;
+  margin-bottom: ${spacing.medium};
+
+  @media (max-width: 768px) {
+    margin-bottom: ${spacing.small};
+  }
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  padding: ${spacing.medium} ${spacing.medium} ${spacing.medium} ${spacing.xlarge};
+  border: 1px solid ${colors.inputBorder};
+  border-radius: 12px;
+  font-size: 1rem;
+  background-color: ${colors.dark};
+  color: ${colors.text};
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: ${colors.inputFocus};
+    outline: none;
+    box-shadow: 0 0 0 2px ${colors.primary}25;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+`;
+
+const IconWrapper = styled.div`
+  position: absolute;
+  left: ${spacing.medium};
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${colors.lightText};
+  font-size: 1.2rem;
+  pointer-events: none;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    left: 12px;
+  }
+`;
 
 // Form Styles
-const formContainer = {
-  backgroundColor: 'white',
-  padding: spacing.xlarge,
-  borderRadius: '12px',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-};
-
-const loginForm = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: spacing.large
-};
-
-const inputGroup = {
-  position: 'relative'
-};
-
-const inputIcon = {
-  position: 'absolute',
-  left: spacing.medium,
-  top: '50%',
-  transform: 'translateY(-50%)',
-  color: colors.lightText,
-  fontSize: '1.2rem'
-};
-
-const inputStyle = {
-  width: '100%',
-  padding: `${spacing.medium} ${spacing.medium} ${spacing.medium} ${spacing.xlarge}`,
-  border: `1px solid ${colors.lightBackground}`,
-  borderRadius: '8px',
-  fontSize: '1rem',
-  transition: 'border-color 0.2s'
-};
-
 const primaryButton = {
   padding: spacing.medium,
-  backgroundColor: colors.secondary,
+  background: colors.gradient1,
   color: 'white',
   border: 'none',
-  borderRadius: '8px',
+  borderRadius: '12px',
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
@@ -233,7 +324,11 @@ const primaryButton = {
   gap: spacing.small,
   fontSize: '1rem',
   fontWeight: '600',
-  transition: 'all 0.2s'
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    transform: 'translateY(-2px)',
+    boxShadow: '0 8px 24px rgba(99,102,241,0.25)'
+  }
 };
 
 const buttonIcon = {
@@ -264,15 +359,72 @@ const signupText = {
 };
 
 const signupLink = {
-  color: colors.primary,
+  color: colors.secondary,
   fontWeight: '600',
-  textDecoration: 'none'
+  textDecoration: 'none',
+  transition: 'color 0.2s ease',
+  '&:hover': {
+    color: colors.primary
+  }
 };
 
-// Add to your CSS file
-// @keyframes spin {
-//   0% { transform: rotate(0deg); }
-//   100% { transform: rotate(360deg); }
-// }
+
+
+// Add this styled component after your other styled components
+const  StyledButton = styled.button`
+  width: 100%;
+  padding: ${spacing.medium};
+  background: ${colors.gradient1};
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${spacing.small};
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(99,102,241,0.25);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 14px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    
+    &:hover:not(:disabled) {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+`;
+
+// Then replace your button element with:
+// <StyledButton type="submit" disabled={isLoading}>
+//   {isLoading ? (
+//     <FaSpinner style={spinnerStyle} />
+//   ) : (
+//     <>
+//       <FaSignInAlt size={18} />
+//       Login
+//     </>
+//   )}
+// </StyledButton>
 
 export default Login;
