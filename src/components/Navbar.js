@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
@@ -17,6 +16,7 @@ const Nav = styled.nav`
   position: sticky;
   top: 0;
   width: 100%;
+  ${'' /* overflow-x: hidden; */}
   z-index: 1500;
   backdrop-filter: blur(8px);
 `;
@@ -28,473 +28,311 @@ const NavContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 72px;
+  height: 72px;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+    height: 60px;
+  }
 `;
 
 const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
   text-decoration: none;
+  z-index: 1600;
 `;
 
 const LogoImg = styled.img`
-  position: absolute;
-  height: 250px;
-  width: auto;
-  top: 50%;
-  transform: translateY(-50%);
-  @media (max-width: 600px) {
-    height: 44px;
-    position: relative;
-    top: auto;
-    transform: none;
+  height: 150px; /* Increased desktop logo size */
+  transition: all 0.3s ease;
+
+  @media (max-width: 768px) {
+    height: 120px; /* Reduced logo size for mobile view */
+  }
+  
+  @media (max-width: 480px) {
+    height: 100px; /* Further reduction on very small screens */
   }
 `;
 
-const Hamburger = styled.button`
+const MobileMenuButton = styled.button`
   background: none;
   border: none;
   color: ${colors.text};
-  font-size: 2.1rem;
+  font-size: 1.8rem;
   cursor: pointer;
+  z-index: 1600;
+  position: relative;
   display: none;
-  @media (max-width: 900px) {
-    display: block;
+
+  @media (max-width: 768px) {
+    display: block; // Always show in mobile view
   }
 `;
 
 const NavLinks = styled.ul`
   list-style: none;
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: center;
   margin: 0;
   padding: 0;
-  @media (max-width: 900px) {
+  transition: all 0.3s ease;
+
+  @media (max-width: 768px) {
     position: fixed;
-    left: 0; top: 0;
-    width: 100vw;
+    top: 0;
+    right: ${({ $isOpen }) => ($isOpen ? "0" : "-100%")};
+    width: 70%;
     height: 100vh;
     background: ${colors.navBg};
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 2.4rem;
+    justify-content: flex-start;
+    padding-top: 5rem; // Add padding-top to account for close button
+    box-shadow: ${({ $isOpen }) => ($isOpen ? "-4px 0 16px rgba(0,0,0,0.1)" : "none")};
     z-index: 1550;
-    transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100vw)")};
-    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
-  }
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 28px;
-  right: 28px;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 2.4rem;
-  z-index: 1600;
-  @media (min-width: 900px) {
-    display: none;
-  }
-`;
-
-const MobileLogo = styled.img`
-  display: none;
-  @media (max-width: 900px) {
-    display: block;
-    height: 50px;
-    margin-bottom: 2rem;
+    visibility: ${({ $isOpen }) => ($isOpen ? "visible" : "hidden")};
+    transition: all 0.3s ease;
   }
 `;
 
 const NavItem = styled.li`
-  display: flex;
-  align-items: center;
+  position: relative;
 `;
 
 const NavLink = styled(Link)`
   color: ${colors.text};
   text-decoration: none;
   font-weight: 500;
-  font-size: 1.19rem;
-  padding: 0.8rem 2.5rem;
-  border-radius: 10px;
-  transition: all 0.16s;
-  ${({ $active }) =>
-    $active
-      ? `
-      color: ${colors.primary};
-      background: ${colors.glassBg};
-      font-weight: 700;
-    `
-      : ""}
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+
   &:hover {
+    background: ${colors.glassBg};
+    color: ${colors.primary};
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    justify-content: center;
+  }
+
+  ${({ $active }) => $active && `
     color: ${colors.primary};
     background: ${colors.glassBg};
+    font-weight: 600;
+  `}
+`;
+
+const AuthButton = styled.button`
+  background: ${colors.primary};
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none; // Add this line to remove underline
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
   }
-  @media (max-width: 900px) {
-    font-size: 1.4rem;
-    justify-content: center;
-    width: 100vw;
-    text-align: center;
-    padding: 1.2rem 0;
-    border-radius: 0;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+`;
+
+const CloseButton = styled(FaTimes)`
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  color: ${colors.text};
+  font-size: 1.8rem;
+  cursor: pointer;
+  z-index: 1600;
+  padding: 8px;
+  display: none;
+
+  @media (max-width: 768px) {
+    display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
+    &:hover {
+      color: ${colors.primary};
+    }
   }
 `;
 
 const Overlay = styled.div`
   display: none;
-  @media (max-width: 900px) {
-    display: ${({ open }) => (open ? "block" : "none")};
+  @media (max-width: 768px) {
+    display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
     position: fixed;
-    z-index: 1540;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(15,23,42,0.78);
-    backdrop-filter: blur(2.5px);
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(3px);
+    z-index: 1540; // Lower than NavLinks
   }
 `;
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
-  const navigate = useNavigate();
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 900);
-  };
   const location = useLocation();
-
-  // Check admin login flag
+  const navigate = useNavigate();
   const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  const isAuthenticated = !!localStorage.getItem('token');
 
-  // Hide upload button on login page
-  const isLoginPage = location.pathname === '/login';
-
+  // Close menu on route change
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
 
-// <<<<<<< HEAD
+  // Close menu on ESC press
   useEffect(() => {
-    const handler = (e) => {
+    const handleEsc = (e) => {
       if (e.key === "Escape") setIsMenuOpen(false);
     };
-    if (isMenuOpen) window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [isMenuOpen]);
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
-  const handleMobileLinkClick = () => setIsMenuOpen(false);
+  // Close menu on window resize (desktop)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) setIsMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  const path = location.pathname;
-// =======
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('isAdmin');
-    setIsAuthenticated(false);
-    navigate('/');
-  };
-// >>>>>>> 6f1a5fdbe62db93586e1ed262ce73f61be5ac5a1
-
-  const handleUploadClick = () => {
-    document.getElementById('uploadInputNavbar').click();
+    navigate('/login');
   };
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  return (
+    <Nav>
+      <NavContainer>
+        <LogoLink to="/">
+          <LogoImg src="/images/logo.png" alt="Logo" />
+        </LogoLink>
 
-    const formData = new FormData();
-    formData.append('certificateFile', file);
-    // For demonstration, using hardcoded studentName and internshipTitle
-    formData.append('studentName', 'Demo Student');
-    formData.append('internshipTitle', 'Demo Internship');
+        <MobileMenuButton 
+          onClick={() => setIsMenuOpen(true)} 
+          aria-label="Open menu">
+          {!isMenuOpen && <FaBars />}
+        </MobileMenuButton>
 
-    try {
-      const response = await fetch('/api/certificates', {
-        method: 'POST',
-        body: formData,
-      });
-      if (response.ok) {
-        alert('Certificate uploaded successfully!');
-      } else {
-        alert('Failed to upload certificate.');
-      }
-    } catch (error) {
-      console.error('Error uploading certificate:', error);
-      alert('Failed to upload certificate.');
-    }
-  };
+        <Overlay 
+          $isOpen={isMenuOpen} 
+          onClick={() => setIsMenuOpen(false)} 
+          aria-hidden="true"
+        />
 
-  return (  
-    <nav style={navStyle}>
-      <div style={navContainer}>
-      <div style={logoStyle}>
-  <Link to="/" style={logoLinkStyle}>
-    <img 
-      src="/images/logo.png" 
-      alt="Credora Logo" 
-      style={logoImageStyle}
-    />
-  </Link>
-</div>  
-        
-        {isMobile && (
-          <button 
-            onClick={() => setIsMenuOpen(!isMenuOpen)} 
-            style={hamburgerButtonStyle}
-          >
-            ☰
-          </button>
-        )}
+        <NavLinks $isOpen={isMenuOpen}>
+          <CloseButton 
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMenuOpen(false);
+            }} 
+            $isOpen={isMenuOpen}
+            aria-label="Close menu"
+          />
+          
+          <NavItem>
+            <NavLink 
+              to="/" 
+              $active={location.pathname === '/'}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Home
+            </NavLink>
+          </NavItem>
 
-        <ul style={{
-          ...ulStyle,
-          ...(isMobile && mobileMenuStyle),
-          display: isMobile ? (isMenuOpen ? 'flex' : 'none') : 'flex'
-        }}>
-          <li style={liStyle}>
-            <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/">Home</Link>
-          </li>
-          <li style={liStyle}>
-            <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/about">About</Link>
-          </li>
-          <li style={liStyle}>
-            <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/internships">Internships</Link>
-          </li>
-          <li style={liStyle}>
-            <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/verify-certificate">Verify</Link>
-          </li>
-          {isAdmin && !isLoginPage && (
-            <li style={liStyle}>
-              <Link to="/upload-certificate" style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }}>
-                Upload Certificate
-              </Link>
-            </li>
+          <NavItem>
+            <NavLink 
+              to="/about" 
+              $active={location.pathname === '/about'}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              About
+            </NavLink>
+          </NavItem>
+
+          <NavItem>
+            <NavLink 
+              to="/internships" 
+              $active={location.pathname === '/internships'}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Internships
+            </NavLink>
+          </NavItem>
+
+          <NavItem>
+            <NavLink 
+              to="/verify-certificate" 
+              $active={location.pathname === '/verify-certificate'}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Verify
+            </NavLink>
+          </NavItem>
+
+          {isAdmin && (
+            <NavItem>
+              <NavLink 
+                to="/upload-certificate" 
+                $active={location.pathname === '/upload-certificate'}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Upload
+              </NavLink>
+            </NavItem>
           )}
+
           {!isAuthenticated ? (
             <>
-              <li style={liStyle}>
-                <Link style={{ ...linkStyle, ...(isMobile && mobileLinkStyle) }} to="/login">Login</Link>
-              </li>
-              <li style={liStyle}>
-                <Link style={{ ...signupButtonStyle, ...(isMobile && mobileLinkStyle) }} to="/signup">Sign Up</Link>
-              </li>
+              <NavItem>
+                <NavLink 
+                  to="/login" 
+                  $active={location.pathname === '/login'}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Login
+                </NavLink>
+              </NavItem>
+              
+              <NavItem>
+                <AuthButton as={Link} to="/signup">
+                  Sign Up
+                </AuthButton>
+              </NavItem>
             </>
           ) : (
-            <>
-              <li style={liStyle}>
-                <button 
-                  onClick={handleLogout} 
-                  style={{ ...logoutButtonStyle, ...(isMobile && mobileLinkStyle) }}
-                >
-                  Logout
-                </button>
-              </li>
-            </>
+            <NavItem>
+              <AuthButton onClick={handleLogout}>
+                Logout
+              </AuthButton>
+            </NavItem>
           )}
-        </ul>
-      </div>
-    </nav>
+        </NavLinks>
+      </NavContainer>
+    </Nav>
   );
-};
-
-const buttonStyle = {
-  padding: '8px 16px',
-  fontSize: '14px',
-  cursor: 'pointer',
-  borderRadius: '6px',
-  border: 'none',
-  backgroundColor: '#2563eb',
-  color: 'white',
-  fontWeight: '600',
-  transition: 'background-color 0.3s ease',
-};
-
-
-// Design System Constants
-//  colors = {
-//   primary: '#2563eb',
-//   secondary: '#0d9488', 
-//   accent: '#f59e0b',
-//   background: '#f8fafc',
-//   text: '#1e293b',
-//   lightText: '#64748b',
-//   lightBackground: '#e2e8f0'
-// };
-const spacing = {
-  small: '8px',
-  medium: '16px',
-  large: '24px',
-  xlarge: '48px'
-};
-const fonts = {
-  primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-  heading: "'Poppins', sans-serif"
-};
-const logoImageStyle = {
-  height: '80px',
-  width: 'auto',
-  objectFit: 'contain',
-  transform: 'scale(2.0)',
-  transformOrigin: 'center center',
-  transition: 'transform 0.3s ease',
-  '@media (max-width: 768px)': {
-    transform: 'scale(1.1)',
-  },
-  '@media (max-width: 480px)': {
-    transform: 'scale(1.0)',
-  },
-  paddingTop :'6px',
-  
-};
-
-// Navbar Styles
-const navStyle = { 
-  backgroundColor: colors.background,
-  padding: `${spacing.small} 0`,
-  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-  position: 'sticky',
-  top: 0,
-  zIndex: 1000,
-  height: '50px', // Fixed navbar height
-  display: 'flex',
-  alignItems: 'center'
-};
-const navContainer = {
-  maxWidth: '1200px',
-  width: '100%',
-  margin: '0 auto',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: `0 ${spacing.medium}`,
-  position: 'relative',
-  height: '100%',
-  '@media (max-width: 768px)': {
-    padding: `0 ${spacing.small}`
-  }
-};
-
-const logoStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  height: '100%',
-  overflow: 'visible',
-  // padding:'5px',
-  '@media (max-width: 768px)': {
-    flex: 1,
-    justifyContent: 'flex-start'
-  }
-};
-
-const logoLinkStyle = {
-  color: colors.primary,
-  textDecoration: 'none',
-  transition: 'opacity 0.2s',
-  ':hover': {
-    opacity: 0.8
-  },
-  paddingLeft: '50px',
-};
-
-const ulStyle = { 
-  listStyle: 'none',
-  display: 'flex',
-  gap: spacing.large,
-  alignItems: 'center',
-  margin: 0,
-  padding: 0
-};
-
-const mobileMenuStyle = {
-  position: 'fixed',
-  top: '80px',
-  left: 0,
-  right: 0,
-  backgroundColor: colors.background,
-  flexDirection: 'column',
-  gap: spacing.small,
-  padding: spacing.medium,
-  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-  zIndex: 999
-};
-const liStyle = {
-  display: 'flex',
-  alignItems: 'center'
-};
-
-const linkStyle = {
-  color: colors.text,
-  textDecoration: 'none',
-  fontFamily: fonts.primary,
-  fontWeight: '500',
-  padding: `${spacing.small} ${spacing.medium}`,
-  borderRadius: '8px',
-  transition: 'all 0.2s',
-  ':hover': {
-    color: colors.primary,
-    backgroundColor: colors.lightBackground
-  }
-};
-
-const mobileLinkStyle = {
-  width: '100%',
-  padding: spacing.small,
-};
-
-const signupButtonStyle = {
-  ...linkStyle,
-  backgroundColor: colors.secondary,
-  color: 'white',
-  padding: `${spacing.small} ${spacing.medium}`,
-  borderRadius: '8px',
-  ':hover': {
-    backgroundColor: '#0b7a6d',
-    transform: 'translateY(-2px)'
-  }
-};
-
-const logoutButtonStyle = {
-  ...signupButtonStyle,
-  backgroundColor: '#dc2626',
-  border: 'none',
-  cursor: 'pointer',
-  fontFamily: fonts.primary,
-  fontSize: '1rem',
-  ':hover': {
-    backgroundColor: '#b91c1c',
-    transform: 'translateY(-2px)'
-  }
-};
-
-const hamburgerButtonStyle = {
-  backgroundColor: 'transparent',
-  border: 'none',
-  cursor: 'pointer',
-  fontSize: '1.8rem',
-  color: colors.text,
-  padding: spacing.small,
-  marginLeft: 'auto',
-  zIndex: 1001
-};
-
-const profileStyle = {
-  color: '#2563eb',
-  fontWeight: '600',
-  fontSize: '14px',
-  padding: '8px 16px',
-  borderRadius: '6px',
-  border: '1px solid #2563eb',
-  cursor: 'default',
-  userSelect: 'none',
-  marginRight: '10px',
 };
 
 export default Navbar;

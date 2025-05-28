@@ -1,21 +1,33 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
-import { FaGithub, FaLinkedin, FaExternalLinkAlt, FaReact, FaPython, FaJava, FaPenNib, FaMobileAlt } from "react-icons/fa";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaExternalLinkAlt,
+  FaReact,
+  FaPython,
+  FaJava,
+  FaPenNib,
+  FaMobileAlt,
+} from "react-icons/fa";
 
-// Design System
+// Dark Theme Design System
 const colors = {
   primary: "#6366f1",
   secondary: "#8b5cf6",
   accent: "#f59e0b",
-  background: "#f8fafc",
-  text: "#1e293b",
-  lightText: "#64748b",
-  lightBackground: "#e2e8f0",
+  background: "#181D31",
+  card: "#232946",
+  text: "#f8fafc",
+  lightText: "#A2A9C4",
+  lightBackground: "#232946",
+  border: "#282F44",
 };
 
 const fonts = {
-  primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-  heading: "'Poppins', sans-serif"
+  primary:
+    "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+  heading: "'Poppins', sans-serif",
 };
 
 const spacing = {
@@ -33,11 +45,11 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-// Styled Components
 const Page = styled.div`
   min-height: 100vh;
   font-family: ${fonts.primary};
   color: ${colors.text};
+  background: ${colors.background};
 `;
 
 const HeroSection = styled.header`
@@ -45,7 +57,7 @@ const HeroSection = styled.header`
   padding: ${spacing.xlarge} ${spacing.medium};
   color: #fff;
   border-radius: 0 0 30px 30px;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.11);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.21);
   text-align: center;
 `;
 
@@ -99,6 +111,7 @@ const SectionTitle = styled.h2`
   font-family: ${fonts.heading};
   margin-bottom: ${spacing.large};
   text-align: center;
+  color: ${colors.text};
 `;
 
 const SkillsGrid = styled.div`
@@ -109,15 +122,16 @@ const SkillsGrid = styled.div`
 `;
 
 const SkillCard = styled.div`
-  background: #fff;
+  background: ${colors.card};
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(99,102,241,0.07);
+  box-shadow: 0 2px 12px rgba(99,102,241,0.09);
   padding: ${spacing.large};
   min-width: 170px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: ${spacing.small};
+  border: 1.5px solid ${colors.border};
 `;
 
 const SkillIcon = styled.div`
@@ -139,20 +153,22 @@ const ProjectsGrid = styled.div`
 `;
 
 const ProjectCard = styled.div`
-  background: #fff;
+  background: ${colors.card};
   border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(99,102,241,0.09);
+  box-shadow: 0 4px 24px rgba(99,102,241,0.13);
   padding: 2.1rem 1.4rem 1.7rem 1.4rem;
   display: flex;
   flex-direction: column;
   gap: ${spacing.medium};
   position: relative;
+  border: 1.5px solid ${colors.border};
 `;
 
 const ProjectTitle = styled.h3`
   font-size: 1.25rem;
   font-family: ${fonts.heading};
   margin-bottom: ${spacing.small};
+  color: ${colors.text};
 `;
 
 const ProjectDesc = styled.p`
@@ -197,7 +213,7 @@ const TimelineItem = styled.li`
     height: 15px;
     background: ${colors.primary};
     border-radius: 50%;
-    border: 2.5px solid #fff;
+    border: 2.5px solid ${colors.card};
     box-shadow: 0 4px 24px rgba(99,102,241,0.13);
   }
 `;
@@ -230,7 +246,7 @@ const Portfolio = () => {
     role: "Full Stack Developer & Founder, Credora",
     bio: "Passionate about building impactful solutions using modern technology. Experienced in web, mobile, and backend development.",
     github: "https://github.com/Sahil-238",
-    linkedin: "https://www.linkedin.com/in/sahil-dhawale/",
+    linkedin: "https://www.linkedin.com/in/sahildhawale/",
     website: "https://credora.space",
   };
 
@@ -243,31 +259,34 @@ const Portfolio = () => {
   ];
 
   const projects = [
+    
     {
-      title: "Credora Internship Platform",
-      desc: "A full-featured platform connecting students with industry internship opportunities, featuring a modern dashboard, certificate verification, and real-time chat.",
-      github: "https://github.com/Sahil-238/credora-platform",
-      live: "https://credora.space",
-    },
+  title: "💼 Credora Solutions Platform",
+  desc: "An enterprise-grade platform delivering premium B2B technology solutions, elite talent acquisition, and full-stack development for Fortune 500 clients. Includes smart dashboards, AI-powered matching, and real-time collaboration tools.",
+  github: "https://github.com/Sahil-238/credora-platform",
+  live: "https://credora.space"
+}
+,
     {
-      title: "Portfolio Website",
-      desc: "Personal portfolio built with React and styled-components. Showcases work, skills, and contact info with a modern UI.",
-      github: "https://github.com/Sahil-238/portfolio",
-      live: "",
-    },
+  title: "🏠 HomeRehab",
+  desc: "A rehabilitation support platform for patients recovering at home, offering personalized exercise routines, progress tracking, and doctor-patient communication in one place.",
+  github: "",
+  live: "https://www.homerehab.in/"
+},
     {
-      title: "AI Resume Analyzer",
-      desc: "A Python and Flask based tool that analyzes resumes and gives smart suggestions for improvement using machine learning.",
-      github: "",
-      live: "",
-    },
+   title: "📘 Exam Ace App",
+  desc: "A smart learning platform featuring student & teacher dashboards, AI chatbot, quizzes, internship updates, result analysis, and a leaderboard system for performance tracking.",
+  github: "",
+  live: "https://exam-ace.vercel.app/"
+}
+,
     {
-      title: "Mobile App - Health Tracker",
-      desc: "A cross-platform Flutter app to track fitness and health goals, sync with smart devices, and visualize progress.",
-      github: "",
-      live: "",
-    },
-  ];
+    title: "🌟 The Career Zone",
+    desc: "An exclusive WhatsApp community offering daily job updates, internship opportunities, career guidance, and mentorship for students. Join 1000+ students already growing their careers!",
+    github: "",
+    live: "https://whatsapp.com/channel/0029Vaj2zYI2kNFi3aA9Ur1y"
+  }
+];
 
   const timeline = [
     {
@@ -332,12 +351,22 @@ const Portfolio = () => {
                 <ProjectDesc>{project.desc}</ProjectDesc>
                 <ProjectLinks>
                   {project.github && (
-                    <a href={project.github} target="_blank" rel="noopener noreferrer" title="GitHub">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="GitHub"
+                    >
                       <FaGithub />
                     </a>
                   )}
                   {project.live && (
-                    <a href={project.live} target="_blank" rel="noopener noreferrer" title="Live Site">
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Live Site"
+                    >
                       <FaExternalLinkAlt />
                     </a>
                   )}
