@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
@@ -121,8 +119,12 @@ const HeroSubtitle = styled(motion.p)`
 `;
 
 const Section = styled.section`
-  padding: 7rem 2rem 3rem 2rem;
+  padding: 7rem 1.5rem 3rem;
   position: relative;
+
+  @media (max-width: 768px) {
+    padding: 5rem 1rem 2rem;
+  }
 `;
 
 const Container = styled.div`
@@ -180,24 +182,41 @@ const StatIcon = styled.div`
 `;
 
 const CardTitle = styled.h3`
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   color: #fff;
   font-family: 'Poppins', 'Inter', sans-serif;
+
+  @media (max-width: 768px) {
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const CardText = styled.p`
   color: #cbd5e1;
-  font-size: 1rem;
+  font-size: clamp(0.95rem, 2vw, 1rem);
   margin-bottom: 0;
+  line-height: 1.6;
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
 `;
 
 const ServicesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2.5rem;
   margin-top: 2.5rem;
+  padding: 0 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
 `;
 
 const ServiceCard = styled(motion.div)`
@@ -209,17 +228,25 @@ const ServiceCard = styled(motion.div)`
   text-align: center;
   box-shadow: 0 4px 18px rgba(30, 41, 59, 0.13);
   transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
-  &:hover {
-    transform: translateY(-10px) scale(1.04);
-    border: 1.5px solid ${colors.primary};
-    box-shadow: 0 8px 32px rgba(99,102,241,0.16);
+
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    
+    &:hover {
+      transform: translateY(-5px) scale(1.02);
+    }
   }
 `;
 
 const ServiceIcon = styled.div`
-  font-size: 2.7rem;
+  font-size: clamp(2.2rem, 4vw, 2.7rem);
   color: ${colors.secondary};
   margin-bottom: 1.2rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const InternshipSection = styled.section`
@@ -249,7 +276,7 @@ const TeamCard = styled(motion.div)`
   &:hover {
     transform: translateY(-5px) scale(1.02);
     border: 1.5px solid ${colors.secondary};
-    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.13);
+    box-shadow: 0 8px 32px rgba(139,92,246,0.13);
   }
 `;
 

@@ -52,7 +52,7 @@ const HeroSection = styled.header`
   border-radius: 0 0 30px 30px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   text-align: center;
-  min-height: 340px;
+  min-height: 200px;
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, 
     rgba(30, 41, 59, 0.85) 50%, 
     rgba(51, 65, 85, 0.92) 100%);
@@ -96,7 +96,7 @@ const HeroText = styled.p`
 const Section = styled.section`
   padding: ${spacing.xlarge} ${spacing.medium};
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 50px auto;
 `;
 
 const FormContainer = styled.div`

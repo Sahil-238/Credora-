@@ -77,6 +77,16 @@ const VideoBackground = styled.video`
   z-index: 0;
   object-fit: cover;
   opacity: 0.6;
+
+  @media (max-width: 768px) {
+    height: 100%;
+    width: 100%;
+    object-position: center;
+  }
+
+  @media (max-width: 480px) {
+    object-position: 50% 50%; // Centers the video content
+  }
 `;
 
 const VideoOverlay = styled.div`
@@ -85,8 +95,22 @@ const VideoOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.85) 50%, rgba(51, 65, 85, 0.85) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.9) 0%,
+    rgba(30, 41, 59, 0.85) 50%,
+    rgba(51, 65, 85, 0.8) 100%
+  );
   z-index: 1;
+
+  @media (max-width: 768px) {
+    background: linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.95) 0%,
+      rgba(30, 41, 59, 0.9) 50%,
+      rgba(51, 65, 85, 0.85) 100%
+    );
+  }
 `;
 
 const HeroSection = styled.section`
@@ -96,6 +120,11 @@ const HeroSection = styled.section`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  
+  @media (max-width: 768px) {
+    min-height: calc(100vh - 60px); // Adjusts for mobile headers
+    padding: 2rem 0;
+  }
 `;
 
 const Blobs = styled.div`
@@ -127,6 +156,15 @@ const HeroContent = styled.div`
   text-align: center;
   max-width: 900px;
   padding: 0 2rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1.5rem;
+    margin-top: -2rem; // Adjusts content position on mobile
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 1rem;
+  }
 `;
 
 const HeroTitle = styled(motion.h1)`
@@ -186,6 +224,18 @@ const TrustIndicators = styled.div`
   gap: 3rem;
   flex-wrap: wrap;
   opacity: 0.6;
+  margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const TrustItem = styled.div`
@@ -193,6 +243,20 @@ const TrustItem = styled.div`
   align-items: center;
   gap: 0.5rem;
   font-size: 0.98rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    gap: 0.4rem;
+    
+    svg {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 // SECTIONS
@@ -215,14 +279,25 @@ const SectionTitle = styled.h2`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+
+  @media (max-width: 768px) {
+    margin-bottom: 2.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
 `;
 
 // SERVICES
 const ServicesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   margin-bottom: 4rem;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
 `;
 
 const ServiceCard = styled(motion.div)`
@@ -234,9 +309,12 @@ const ServiceCard = styled(motion.div)`
   transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
   position: relative;
   overflow: hidden;
-  &:hover {
-    transform: translateY(-8px) scale(1.02);
-    border: 1px solid rgba(255,255,255,0.2);
+
+  @media (max-width: 768px) {
+    padding: 1.75rem;
+    &:hover {
+      transform: translateY(-4px) scale(1.01);
+    }
   }
 `;
 
@@ -248,7 +326,8 @@ const CardGradient = styled.div`
 `;
 
 const IconContainer = styled.div`
-  width: 60px; height: 60px;
+  width: 60px;
+  height: 60px;
   border-radius: 16px;
   background: ${({gradient}) => gradient};
   display: flex;
@@ -256,6 +335,14 @@ const IconContainer = styled.div`
   justify-content: center;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
+
+  @media (max-width: 768px) {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
 `;
 
 const CardTitle = styled.h3`
@@ -263,12 +350,23 @@ const CardTitle = styled.h3`
   font-weight: 700;
   margin-bottom: 1rem;
   color: white;
+
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
 `;
 
 const CardDescription = styled.p`
   color: rgba(255,255,255,0.78);
   margin-bottom: 1.5rem;
   line-height: 1.6;
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
 `;
 
 const BenefitsList = styled.ul`
@@ -284,6 +382,17 @@ const BenefitItem = styled.li`
   margin-bottom: 0.75rem;
   color: rgba(255,255,255,0.86);
   font-size: 0.98rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    svg {
+      font-size: 0.9rem;
+      min-width: 12px !important;
+    }
+  }
 `;
 
 // STATS
@@ -363,12 +472,21 @@ const ProcessNumber = styled.div`
 // TESTIMONIALS
 const TestimonialSection = styled.section`
   padding: 8rem 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 4rem 1rem;
+  }
 `;
 
 const TestimonialGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 `;
 
 const TestimonialCard = styled(motion.div)`
@@ -378,6 +496,11 @@ const TestimonialCard = styled(motion.div)`
   border-radius: 24px;
   padding: 2.5rem;
   position: relative;
+
+  @media (max-width: 768px) {
+    padding: 1.75rem;
+    border-radius: 20px;
+  }
 `;
 
 const TestimonialText = styled.p`
@@ -386,18 +509,34 @@ const TestimonialText = styled.p`
   margin-bottom: 2rem;
   font-style: italic;
   color: rgba(255,255,255,0.92);
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const ClientInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+  }
 `;
 
 const ClientAvatar = styled.div`
-  width: 50px; height: 50px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: ${colors.gradient3};
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
 `;
 
 const ClientDetails = styled.div`
@@ -408,11 +547,19 @@ const ClientDetails = styled.div`
 const ClientName = styled.div`
   font-weight: 600;
   color: white;
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+  }
 `;
 
 const ClientRole = styled.div`
   font-size: 0.9rem;
   color: rgba(255,255,255,0.6);
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+  }
 `;
 
 // FINAL CTA
