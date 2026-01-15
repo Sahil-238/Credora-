@@ -29,10 +29,11 @@ const fonts = {
 
 const quickOptions = [
   { icon: <FaHome />, text: "About Credora" },
-  { icon: <FaBriefcase />, text: "Internships" },
-  { icon: <FaCertificate />, text: "Certificates" },
-  { icon: <FaInfoCircle />, text: "Meet Team" }
+  { icon: <FaBriefcase />, text: "Our Services" },
+  { icon: <FaInfoCircle />, text: "How We Work" },
+  { icon: <FaInfoCircle />, text: "Meet the Team" }
 ];
+
 
 const FeedbackButton = ({ onClick, active, type, disabled }) => (
   <button
@@ -201,27 +202,35 @@ const ChatBot = () => {
       addMessage("Credora was founded by Sahil Dhawale along with our dedicated team of Nayan Raut (Co-Founder) and Aniket Kumare (HR).", "bot");
       setIsTyping(false);
       return;
-    } else if (msg.includes("about credora")) {
+    }  else if (msg.includes("about credora")) {
       addMessage(
-        "Credora is a dynamic internship platform dedicated to empowering students and early-career professionals. We offer remote internships with flexible schedules, hands-on exposure, and verified certificates. For more details, check out our <a href=\"https://www.linkedin.com/company/credora-space\" target=\"_blank\" rel=\"noopener noreferrer\">LinkedIn page</a> or <a href=\"https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb\" target=\"_blank\" rel=\"noopener noreferrer\">join our WhatsApp group</a>.",
-        "bot"
+      "Credora is a technology solutions and consulting company focused on building scalable software, web applications, and digital products for startups and growing businesses. Alongside our core services, we also run a limited early-career talent incubation initiative to support long-term team growth.",
+      "bot"
       );
+
       setIsTyping(false);
       return;
-    } else if (msg.includes("internship")) {
-      addMessage(
-        "We offer remote internships in various domains such as Web Development, Data Science, Mobile App Development, Data Analysis, and more. Our programs provide real-world exposure along with mentorship and verified certificates upon completion.",
-        "bot"
-      );
+    } else if (msg.includes("internship") || msg.includes("career")) {
+  addMessage(
+    "Credora primarily operates as a technology solutions company. We occasionally run a selective early-career talent incubation initiative focused on internal team development. This is not an open public internship program.",
+    "bot"
+  );
+
       setIsTyping(false);
       return;
-    } else if (msg.includes("certificate")) {
-      addMessage("Yes, upon successful completion of our internship programs, you will receive a verified digital certificate.", "bot");
-      setIsTyping(false);
+    }  else if (msg.includes("certificate")) {
+  addMessage(
+    "Credora focuses on delivering software solutions and consulting services. Any internal training initiatives are designed for team development rather than public certification programs.",
+    "bot"
+  );
+setIsTyping(false);
       return;
-    } else if (msg.includes("team")) {
-      addMessage("Our team includes Sahil Dhawale (Founder), Nayan Raut (Co-Founder), and Aniket Kumare (HR).", "bot");
-      setIsTyping(false);
+    } else if (msg.includes("founder") || msg.includes("team")) {
+  addMessage(
+    "Credora was founded by Sahil Dhawale. The leadership team includes Nayan Raut (Co-Founder) and Aniket Kumare (HR & Operations).",
+    "bot"
+  );
+setIsTyping(false);
       return;
     } else if (msg.includes("contact")) {
       addMessage(
@@ -234,23 +243,30 @@ const ChatBot = () => {
     
     // Fallback: Use the Together API for a conversational response
     try {
-      const systemPrompt = `You are Credora Assist, a professional and helpful AI assistant for Credora.
-Key Information:
-- Founded by Sahil Dhawale (Founder), Nayan Raut (Co-Founder), and Aniket Kumare (HR)
-- Located in Wardha, Maharashtra
-- Offering remote internships in Web Development, Data Science, Mobile App Development, Data Analysis, and more
-- Contact: hr@credora.space or aniket@credora.space
+      const systemPrompt = `
+You are Credora Assist, a professional AI assistant for Credora.
 
-Important Links:
-- To visit our LinkedIn page, click here: Visit our LinkedIn page (https://www.linkedin.com/company/credora-space)
-- To join our WhatsApp group, click here: Join our WhatsApp community (https://chat.whatsapp.com/CSAG3Ev8PdE3yXMlqL14wb)
+About Credora:
+- Credora is a technology solutions and consulting company
+- Services include custom software development, web & application development, and technical consulting
+- Founded by Sahil Dhawale
+- Leadership team: Nayan Raut (Co-Founder), Aniket Kumare (HR & Operations)
+- Location: Wardha, Maharashtra, India
+- Operates remotely with clients across India
 
-Response Guidelines:
-- For greetings (hi, hello, hey, etc.), respond in 2-3 lines maximum
-- Keep all responses concise and friendly
-- When mentioning social media, use the format: "Visit our [platform] (link)"
-- Avoid HTML tags in responses
-- For general questions, limit responses to 4-5 lines maximum`;
+Important Guidelines:
+- DO NOT position Credora as an internship platform
+- If asked about internships or certificates, explain that Credora runs a limited internal early-career talent incubation initiative, not a public internship program
+- Keep responses concise, professional, and business-oriented
+- Avoid emojis in professional answers
+- Do not mention WhatsApp groups unless explicitly asked
+- Maximum response length: 4–5 lines
+- Tone: confident, modern, trustworthy
+
+Contact:
+- Email: hr@credora.space | aniket@credora.space
+`;
+
       
       const response = await fetch('https://api.together.xyz/v1/chat/completions', {
         method: 'POST',
@@ -476,7 +492,8 @@ Response Guidelines:
               {/* Header */}
               <div style={getHeaderStyles()}>
                 <span style={{ flex: 1, textAlign: 'left', paddingLeft: '16px' }}>
-                  Credora Assistant
+                  Credora Assist
+
                 </span>
                 {/* Button container absolutely positioned at top-right */}
                 <div style={{
