@@ -311,18 +311,18 @@ const MemberBio = styled.p`
 const services = [
   {
     icon: <FaChartLine />,
-    title: "Talent Analytics",
-    description: "Leverage our advanced analytics to make data-driven hiring decisions.",
+    title: "Custom Software Development",
+    description: "We build scalable, secure, and high-performance software solutions tailored to business needs.",
   },
   {
     icon: <FaHandshake />,
-    title: "Corporate Partnerships",
-    description: "Tailored solutions to meet your organization's talent acquisition needs.",
+    title: "Web & Application Development",
+    description: "Modern web platforms and applications designed for performance, usability, and growth.",
   },
   {
     icon: <FaAward />,
-    title: "Skill Certification",
-    description: "Industry-recognized certifications to validate candidate skills.",
+    title: "Technology Consulting",
+    description: "Strategic technical guidance to help businesses choose the right architecture and tools.",
   },
 ];
 
@@ -388,14 +388,15 @@ const About = () => (
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Revolutionizing Talent Acquisition
+            Building Scalable Digital Solutions
+
           </HeroTitle>
           <HeroSubtitle
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.95, delay: 0.2 }}
           >
-            Empowering businesses with data-driven solutions and a premium talent pipeline.
+            We design and develop modern software, web platforms, and custom digital products for businesses and startups.
           </HeroSubtitle>
         </HeroContent>
       </HeroSection>

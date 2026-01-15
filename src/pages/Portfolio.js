@@ -191,64 +191,85 @@ const ProjectLinks = styled.div`
 `;
 
 const Timeline = styled.ul`
-  border-left: 3px solid ${colors.primary};
-  padding-left: 24px;
-  margin: 0 auto;
-  max-width: 700px;
-  list-style: none;
-`;
-
-const TimelineItem = styled.li`
   position: relative;
-  margin-bottom: ${spacing.large};
-  &:last-child {
-    margin-bottom: 0;
-  }
+  max-width: 800px;
+  margin: 0 auto;
+  padding-left: 2.5rem;
+  list-style: none;
+
   &::before {
     content: "";
     position: absolute;
-    left: -12px;
-    top: 5px;
-    width: 15px;
-    height: 15px;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
     background: ${colors.primary};
-    border-radius: 50%;
-    border: 2.5px solid ${colors.card};
-    box-shadow: 0 4px 24px rgba(99,102,241,0.13);
+    border-radius: 2px;
   }
 `;
 
-const TimelineDate = styled.span`
-  font-size: 0.98rem;
-  color: ${colors.accent};
-  font-weight: bold;
+
+const TimelineItem = styled.li`
+  position: relative;
+  padding-bottom: 2.5rem;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -18px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    background: ${colors.primary};
+    border-radius: 50%;
+    border: 3px solid ${colors.background};
+    box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+  }
 `;
 
+
+const TimelineDate = styled.span`
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: ${colors.accent};
+  margin-bottom: 0.3rem;
+`;
+
+
 const TimelineTitle = styled.div`
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: ${colors.text};
-  margin-bottom: 3px;
+  margin-bottom: 0.25rem;
 `;
 
 const TimelineDesc = styled.p`
+  font-size: 0.98rem;
   color: ${colors.lightText};
-  font-size: 1rem;
+  line-height: 1.6;
   margin: 0;
 `;
+
 
 const Portfolio = () => {
   // --- DUMMY DATA (Replace with your own details) ---
 
   const profile = {
-    avatar: "/images/avatar.jpg", // Place your image in public/images/avatar.jpg
-    name: "Sahil Dhawale",
-    role: "Full Stack Developer & Founder, Credora",
-    bio: "Passionate about building impactful solutions using modern technology. Experienced in web, mobile, and backend development.",
-    github: "https://github.com/Sahil-238",
-    linkedin: "https://www.linkedin.com/in/sahildhawale/",
-    website: "https://credora.space",
-  };
+  avatar: "/images/avatar.jpg",
+  name: "Credora",
+  role: "Technology Solutions & Consulting Company",
+  bio: "We design, build, and scale modern software solutions for startups and growing businesses. Led by experienced engineers with a focus on quality, clarity, and long-term value.",
+  github: "https://github.com/Sahil-238",
+  linkedin: "https://www.linkedin.com/company/credora-space",
+  website: "https://credora.space",
+};
+
 
   const skills = [
     { icon: <FaReact />, name: "React.js" },
@@ -259,52 +280,49 @@ const Portfolio = () => {
   ];
 
   const projects = [
-    
-    {
-  title: "💼 Credora Solutions Platform",
-  desc: "An enterprise-grade platform delivering premium B2B technology solutions, elite talent acquisition, and full-stack development for Fortune 500 clients. Includes smart dashboards, AI-powered matching, and real-time collaboration tools.",
-  github: "https://github.com/Sahil-238/credora-platform",
-  live: "https://credora.space"
-}
-,
-    {
-  title: "🏠 HomeRehab",
-  desc: "A rehabilitation support platform for patients recovering at home, offering personalized exercise routines, progress tracking, and doctor-patient communication in one place.",
-  github: "",
-  live: "https://www.homerehab.in/"
-},
-    {
-   title: "📘 Exam Ace App",
-  desc: "A smart learning platform featuring student & teacher dashboards, AI chatbot, quizzes, internship updates, result analysis, and a leaderboard system for performance tracking.",
-  github: "",
-  live: "https://exam-ace.vercel.app/"
-}
-,
-    {
-    title: "🌟 The Career Zone",
-    desc: "An exclusive WhatsApp community offering daily job updates, internship opportunities, career guidance, and mentorship for students. Join 1000+ students already growing their careers!",
+  {
+    title: "Credora Solutions Platform",
+    desc: "Internal platform showcasing Credora’s service offerings, case highlights, and business workflows. Built with scalability, performance, and maintainability in mind.",
+    github: "",
+    live: "https://credora.space"
+  },
+  {
+    title: "HomeRehab",
+    desc: "A healthcare support platform enabling home-based recovery through guided routines, progress tracking, and secure communication.",
+    github: "",
+    live: "https://www.homerehab.in/"
+  },
+  {
+    title: "Exam Ace",
+    desc: "An education-focused web platform with dashboards, quizzes, analytics, and learning tools designed for student performance tracking.",
+    github: "",
+    live: "https://exam-ace.vercel.app/"
+  },
+  {
+    title: "The Career Zone",
+    desc: "A community-driven initiative providing career resources, job updates, and mentorship through curated digital channels.",
     github: "",
     live: "https://whatsapp.com/channel/0029Vaj2zYI2kNFi3aA9Ur1y"
   }
 ];
 
   const timeline = [
-    {
-      date: "2024 - Present",
-      title: "Founder & Full Stack Developer",
-      desc: "Credora - Leading the development and growth of a fast-growing internship platform.",
-    },
-    {
-      date: "2022 - 2024",
-      title: "Software Engineer",
-      desc: "Built scalable web and mobile solutions for startups and enterprises.",
-    },
-    {
-      date: "2020 - 2022",
-      title: "Freelance Developer",
-      desc: "Delivered multiple full-stack projects for clients globally.",
-    },
-  ];
+  {
+    date: "2024 – Present",
+    title: "Founder & Lead Engineer",
+    desc: "Founded Credora to deliver scalable software solutions and technology consulting for startups and businesses.",
+  },
+  {
+    date: "2022 – 2024",
+    title: "Full Stack Developer",
+    desc: "Worked on multiple web and application projects involving frontend, backend, and system design.",
+  },
+  {
+    date: "2020 – 2022",
+    title: "Freelance Development",
+    desc: "Collaborated with clients to design and build custom software solutions across different domains.",
+  },
+];
 
   // --- END DUMMY DATA ---
 
@@ -330,17 +348,7 @@ const Portfolio = () => {
           </SocialLinks>
         </HeroSection>
 
-        <Section>
-          <SectionTitle>Skills</SectionTitle>
-          <SkillsGrid>
-            {skills.map((skill, idx) => (
-              <SkillCard key={idx}>
-                <SkillIcon>{skill.icon}</SkillIcon>
-                <SkillName>{skill.name}</SkillName>
-              </SkillCard>
-            ))}
-          </SkillsGrid>
-        </Section>
+        
 
         <Section>
           <SectionTitle>Projects</SectionTitle>

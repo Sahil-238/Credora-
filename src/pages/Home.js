@@ -289,16 +289,18 @@ const SectionTitle = styled.h2`
 // SERVICES
 const ServicesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
-  margin-bottom: 4rem;
-  
-  @media (max-width: 768px) {
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 0 1rem;
   }
 `;
+
 
 const ServiceCard = styled(motion.div)`
   background: ${colors.glassBg};
@@ -680,42 +682,43 @@ const OutlinedButton = styled(DarkButton)`
 // DATA
 const services = [
   {
-    icon: <FaUsers />,
-    title: 'Elite Talent Acquisition',
-    description: 'Access pre-screened, top-tier professionals ready to transform your business from day one.',
+    icon: <FaCode />,
+    title: 'Custom Software Development',
+    description: 'We build scalable, secure, and high-performance software solutions tailored to your business goals.',
     benefits: [
-      'AI-powered skill matching',
-      'Cultural fit assessment',
-      '99% retention rate',
-      'Instant deployment ready',
+      'Modern tech stack',
+      'Scalable architecture',
+      'Secure & reliable',
+      'Production-ready delivery',
     ],
     gradient: colors.gradient1,
   },
   {
-    icon: <FaRocket />,
-    title: 'Full-Stack Solutions',
-    description: 'End-to-end project delivery with our certified teams of industry experts.',
+    icon: <FaPaintBrush />,
+    title: 'Web & Application Development',
+    description: 'Designing and developing responsive web platforms and applications that users love.',
     benefits: [
-      'Agile methodology',
-      'Real-time collaboration',
-      'Quality guaranteed',
-      '24/7 support included',
+      'UI/UX focused',
+      'Mobile-first design',
+      'Performance optimized',
+      'SEO ready',
     ],
     gradient: colors.gradient2,
   },
   {
     icon: <FaLightbulb />,
-    title: 'Innovation Consulting',
-    description: 'Strategic guidance to revolutionize your business with cutting-edge technology.',
+    title: 'Technology Consulting',
+    description: 'Strategic guidance to help businesses choose the right architecture, tools, and solutions.',
     benefits: [
-      'Future-proof strategies',
-      'Market intelligence',
-      'ROI optimization',
-      'Competitive advantage',
+      'Technical roadmaps',
+      'Cost optimization',
+      'Scalable solutions',
+      'Long-term growth',
     ],
     gradient: colors.gradient3,
   },
 ];
+
 
 const stats = [
   { value: '500+', label: 'Projects Delivered', icon: <FaRocket /> },
@@ -726,59 +729,42 @@ const stats = [
 
 const process = [
   {
-    title: 'Initial Consultation',
-    description: 'In-depth discovery call to understand your vision, goals, and technical requirements',
+    icon: <FaLightbulb />,
+    title: 'Discover & Plan',
+    description: 'We understand your goals, users, and challenges to define a clear technical roadmap.',
   },
   {
-    title: 'Requirements Analysis',
-    description: 'Detailed assessment of your needs, market analysis, and technology stack evaluation',
+    icon: <FaCode />,
+    title: 'Design & Build',
+    description: 'Our team designs and develops scalable, high-quality solutions using modern technologies.',
   },
   {
-    title: 'Strategic Planning',
-    description: 'Custom solution architecture, resource allocation, and milestone planning',
+    icon: <FaShieldAlt />,
+    title: 'Test & Launch',
+    description: 'We ensure performance, security, and reliability before a smooth production launch.',
   },
   {
-    title: 'Team Assembly',
-    description: 'Handpicking expert developers, designers, and specialists for your project',
-  },
-  {
-    title: 'Agile Development',
-    description: 'Iterative development with regular sprints and continuous feedback integration',
-  },
-  {
-    title: 'Quality Assurance',
-    description: 'Rigorous testing, security audits, and performance optimization',
-  },
-  {
-    title: 'Deployment & Launch',
-    description: 'Smooth deployment process with zero-downtime and comprehensive documentation',
-  },
-  {
-    title: 'Ongoing Support',
-    description: 'Dedicated maintenance, 24/7 support, and continuous improvement cycles',
-  },
-  {
-    title: 'Scaling & Innovation',
-    description: 'Proactive enhancements and scaling to keep your business ahead',
-  },
-  {
-    title: 'Partnership Review',
-    description: 'Regular check-ins to align on goals and celebrate achievements',
+    icon: <FaChartLine />,
+    title: 'Scale & Support',
+    description: 'Post-launch support, optimization, and scaling to support long-term growth.',
   },
 ];
+
 const testimonials = [
   {
-    text: 'Credora transformed our entire development pipeline. Their elite team delivered solutions that exceeded every expectation. Simply incredible.',
-    name: 'David Chen',
-    role: 'CTO, TechFlow Inc.',
-    company: 'Fortune 500'
+    text: 'Credora helped us build a complete internal dashboard for our operations. The team was responsive, practical, and delivered exactly what we needed.',
+    name: 'Rohit Kulkarni',
+    role: 'Operations Lead',
+    company: 'LogiCore Solutions, Pune',
   },
+
+  
   {
-    text: 'The level of expertise and professionalism is unmatched. They delivered our complex AI project 2 weeks ahead of schedule.',
-    name: 'Sarah Rodriguez',
-    role: 'VP Engineering, DataVision',
-    company: 'Series B Startup'
-  }
+    text: 'Credora built our landing pages and admin panel with great attention to UI and performance. The experience was smooth from start to finish.',
+    name: 'Sneha Joshi',
+    role: 'Co-founder',
+    company: 'HealthBridge Startup',
+  },
 ];
 
 // MAIN COMPONENT
@@ -877,40 +863,82 @@ const Home = () => {
           </Container>
         </Section>
 
-        {/* STATS */}
-        <Section>
-          <Container>
-            <StatsSection>
-              <StatsGrid>
-                {stats.map((stat, i) => (
-                  <StatCard key={i}>
-                    <StatIcon>{stat.icon}</StatIcon>
-                    <StatNumber>{stat.value}</StatNumber>
-                    <StatLabel>{stat.label}</StatLabel>
-                  </StatCard>
-                ))}
-              </StatsGrid>
-            </StatsSection>
-          </Container>
-        </Section>
+              {/* WHY CHOOSE US */}
+          <Section>
+            <Container>
+              <SectionTitle>Why Teams Choose Credora</SectionTitle>
 
-        {/* PROCESS */}
-        <Section>
-          <Container>
-            <ProcessSectionBox>
-              <SectionTitle style={{ marginBottom: '4rem' }}>Our Process</SectionTitle>
-              <ProcessGrid>
-                {process.map((step, i) => (
-                  <ProcessCard key={i}>
-                    <ProcessNumber>{i + 1}</ProcessNumber>
-                    <CardTitle>{step.title}</CardTitle>
-                    <CardDescription>{step.description}</CardDescription>
-                  </ProcessCard>
-                ))}
-              </ProcessGrid>
-            </ProcessSectionBox>
-          </Container>
-        </Section>
+              <ServicesGrid>
+                <ServiceCard>
+                  <IconContainer gradient={colors.gradient1}>
+                    <FaShieldAlt />
+                  </IconContainer>
+                  <CardTitle>Reliable Delivery</CardTitle>
+                  <CardDescription>
+                    We focus on clear communication, realistic timelines, and dependable execution.
+                  </CardDescription>
+                </ServiceCard>
+
+                <ServiceCard>
+                  <IconContainer gradient={colors.gradient2}>
+                    <FaCode />
+                  </IconContainer>
+                  <CardTitle>Quality-First Engineering</CardTitle>
+                  <CardDescription>
+                    Clean architecture, scalable code, and performance-driven development.
+                  </CardDescription>
+                </ServiceCard>
+
+                <ServiceCard>
+                  <IconContainer gradient={colors.gradient3}>
+                    <FaHandshake />
+                  </IconContainer>
+                  <CardTitle>Transparent Collaboration</CardTitle>
+                  <CardDescription>
+                    We work like an extended team, keeping clients involved at every stage.
+                  </CardDescription>
+                </ServiceCard>
+
+                <ServiceCard>
+                  <IconContainer gradient={colors.gradient4}>
+                    <FaLightbulb />
+                  </IconContainer>
+                  <CardTitle>Growth-Oriented Thinking</CardTitle>
+                  <CardDescription>
+                    We don’t just build software — we help you make the right technical decisions.
+                  </CardDescription>
+                </ServiceCard>
+              </ServicesGrid>
+            </Container>
+          </Section>
+
+
+        {/* HOW WE WORK */}
+<Section>
+  <Container>
+    <SectionTitle>How We Work</SectionTitle>
+
+    <ServicesGrid>
+      {process.map((step, i) => (
+        <ServiceCard
+          key={i}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: i * 0.1 }}
+        >
+          <IconContainer gradient={colors.gradient2}>
+            {step.icon}
+          </IconContainer>
+
+          <CardTitle>{step.title}</CardTitle>
+          <CardDescription>{step.description}</CardDescription>
+        </ServiceCard>
+      ))}
+    </ServicesGrid>
+  </Container>
+</Section>
+
 
         {/* TESTIMONIALS */}
         <TestimonialSection>
@@ -939,29 +967,40 @@ const Home = () => {
           </Container>
         </TestimonialSection>
 
-        {/* INTERNSHIP CTA */}
+        {/* EARLY-CAREER INITIATIVE */}
         <Section>
           <Container>
-            <ServiceCard style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-              <IconContainer style={{ margin: '0 auto 1.5rem auto' }}>
+            <ServiceCard
+              style={{
+                textAlign: 'center',
+                maxWidth: '800px',
+                margin: '0 auto',
+              }}
+            >
+              <IconContainer
+                style={{ margin: '0 auto 1.5rem auto' }}
+                gradient={colors.gradient3}
+              >
                 <FaGraduationCap />
               </IconContainer>
-              <CardTitle>Building Tomorrow's Workforce</CardTitle>
+
+              <CardTitle>Early-Career Talent Incubation</CardTitle>
+
               <CardDescription>
-                We also nurture emerging talent through our elite internship program, creating the skilled professionals your industry demands.
+                As part of our long-term vision, Credora runs a selective early-career
+                initiative focused on mentoring and training aspiring professionals.
+                This program supports our internal growth and strengthens our future
+                delivery teams it is not our primary business offering.
               </CardDescription>
-              <CTAButton
-                secondary
-                style={{ margin: '1rem auto 0 auto' }}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleCTAClick('/internships')}
-              >
-                Explore Internship Program
-              </CTAButton>
+
+              <CardDescription style={{ opacity: 0.7, marginTop: '1rem' }}>
+                Our core focus remains delivering high-impact software solutions and
+                digital products for businesses worldwide.
+              </CardDescription>
             </ServiceCard>
           </Container>
         </Section>
+
 
         {/* FINAL CTA */}
         <Section>
@@ -969,7 +1008,7 @@ const Home = () => {
             <FinalCTA>
               <FinalCTATitle>Ready to Transform Your Business?</FinalCTATitle>
               <FinalCTAText>
-                Join the elite companies who trust Credora for their most critical projects. Let's create something extraordinary together.
+                Join the elite companies who trust Credora for their most critical projects.
               </FinalCTAText>
               <FinalCTAButtons>
                 <DarkButton

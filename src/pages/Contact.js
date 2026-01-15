@@ -259,7 +259,7 @@ const Contact = () => {
         <HeroSection>
           <HeroTitle>Contact Us</HeroTitle>
           <HeroSubtitle>
-            We'd love to hear from you! Reach out to Credora for queries, partnerships, or support.
+          Get in touch with Credora for project inquiries, partnerships, or technical support.
           </HeroSubtitle>
         </HeroSection>
         <Section>
