@@ -251,7 +251,7 @@ About Credora:
 - Services include custom software development, web & application development, and technical consulting
 - Founded by Sahil Dhawale
 - Leadership team: Nayan Raut (Co-Founder), Aniket Kumare (HR & Operations)
-- Location: Wardha, Maharashtra, India
+- Location: Hyderabad, Telangana, India
 - Operates remotely with clients across India
 
 Important Guidelines:

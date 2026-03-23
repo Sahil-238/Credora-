@@ -216,7 +216,7 @@ const Footer = () => {
               Credora Inc.
               <br />
               Phone: +91 7588788403 <br />
-              Wardha, 442001
+              Telangana, 500082
             </Address>
           </ContactInfo>
         </FooterSection>

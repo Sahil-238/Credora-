@@ -302,12 +302,12 @@ const Contact = () => {
                 </InfoRow>
                 <InfoRow>
                   <FaMapMarkerAlt />
-                  <span>Wardha, Maharashtra, India</span>
+                  <span>Hyderabad, Telangana, India</span>
                 </InfoRow>
               </InfoCard>
               <MapFrame
                 title="Credora Location"
-                src="https://www.openstreetmap.org/export/embed.html?bbox=78.585%2C20.735%2C78.595%2C20.745&amp;layer=mapnik"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=78.40830802917482%2C17.41698575740963%2C78.46667289733888%2C17.45809266404151&layer=mapnik&marker=17.43754,78.43749"
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
